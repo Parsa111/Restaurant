@@ -422,3 +422,166 @@ function letoile_get_menu_api_data() {
 
     return rest_ensure_response( $result );
 }
+
+/**
+ * Add WordPress Admin Menu Pages for Parsa Bistro Management & Supabase Sync
+ */
+function letoile_add_admin_menu_pages() {
+    // Top-level Admin Menu
+    add_menu_page(
+        __( 'Parsa Reservations', 'letoile-luxury-bistro' ),
+        __( 'Parsa Bistro', 'letoile-luxury-bistro' ),
+        'edit_posts',
+        'parsa-bistro-reservations',
+        'letoile_render_admin_reservations_page',
+        'dashicons-food',
+        6
+    );
+
+    // Submenu: All Reservations
+    add_submenu_page(
+        'parsa-bistro-reservations',
+        __( 'Table Reservations', 'letoile-luxury-bistro' ),
+        __( 'All Reservations', 'letoile-luxury-bistro' ),
+        'edit_posts',
+        'parsa-bistro-reservations',
+        'letoile_render_admin_reservations_page'
+    );
+
+    // Submenu: Supabase Database Settings
+    add_submenu_page(
+        'parsa-bistro-reservations',
+        __( 'Supabase Settings', 'letoile-luxury-bistro' ),
+        __( 'Supabase Database', 'letoile-luxury-bistro' ),
+        'manage_options',
+        'parsa-supabase-settings',
+        'letoile_render_supabase_settings_page'
+    );
+}
+add_action( 'admin_menu', 'letoile_add_admin_menu_pages' );
+
+/**
+ * Render WordPress Admin Reservations Management Page
+ */
+function letoile_render_admin_reservations_page() {
+    // Handle Delete/Status action
+    if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['res_id'] ) ) {
+        check_admin_referer( 'parsa_delete_res_' . $_GET['res_id'] );
+        wp_delete_post( intval( $_GET['res_id'] ), true );
+        echo '<div class="notice notice-success is-dismissible"><p>Reservation deleted successfully.</p></div>';
+    }
+
+    $reservations = get_posts( array(
+        'post_type'      => 'reservation',
+        'posts_per_page' => 50,
+        'post_status'    => 'publish',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ) );
+    ?>
+    <div class="wrap">
+        <h1 style="display:flex; align-items:center; gap: 10px;">
+            <span class="dashicons dashicons-food" style="font-size: 32px; width: 32px; height: 32px; color: #d4af37;"></span>
+            Parsa Restaurant — Table Reservations Manager
+        </h1>
+        <p>Manage all guest table bookings submitted from your website or Supabase database.</p>
+        
+        <table class="wp-list-table widefat fixed striped table-view-list" style="margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th style="width: 120px;">Code</th>
+                    <th>Guest Name</th>
+                    <th>Date & Time</th>
+                    <th>Guests</th>
+                    <th>Seating Area</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ( empty( $reservations ) ) : ?>
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 20px;">No table reservations booked yet.</td>
+                    </tr>
+                <?php else : ?>
+                    <?php foreach ( $reservations as $res ) : 
+                        $code    = get_post_meta( $res->ID, '_res_booking_code', true ) ?: $res->post_title;
+                        $name    = get_post_meta( $res->ID, '_res_name', true ) ?: 'Guest';
+                        $date    = get_post_meta( $res->ID, '_res_date', true );
+                        $time    = get_post_meta( $res->ID, '_res_time', true );
+                        $guests  = get_post_meta( $res->ID, '_res_guests', true ) ?: 2;
+                        $seating = get_post_meta( $res->ID, '_res_seating', true ) ?: 'Main Dining Room';
+                        $email   = get_post_meta( $res->ID, '_res_email', true );
+                        $phone   = get_post_meta( $res->ID, '_res_phone', true );
+                        $status  = get_post_meta( $res->ID, '_res_status', true ) ?: 'Confirmed';
+                        $delete_url = wp_nonce_url( admin_url( 'admin.php?page=parsa-bistro-reservations&action=delete&res_id=' . $res->ID ), 'parsa_delete_res_' . $res->ID );
+                    ?>
+                        <tr>
+                            <td><strong style="color: #d4af37;"><?php echo esc_html( $code ); ?></strong></td>
+                            <td><strong><?php echo esc_html( $name ); ?></strong></td>
+                            <td><?php echo esc_html( $date . ' @ ' . $time ); ?></td>
+                            <td><span class="badge" style="background:#2271b1; color:#fff; padding:2px 8px; border-radius:10px;"><?php echo esc_html( $guests ); ?> Guests</span></td>
+                            <td><?php echo esc_html( $seating ); ?></td>
+                            <td>
+                                <div><?php echo esc_html( $phone ); ?></div>
+                                <div style="font-size: 11px; color: #666;"><?php echo esc_html( $email ); ?></div>
+                            </td>
+                            <td><span style="color: #46b450; font-weight: bold;">✔ <?php echo esc_html( $status ); ?></span></td>
+                            <td>
+                                <a href="<?php echo esc_url( get_edit_post_link( $res->ID ) ); ?>" class="button button-small">View / Edit</a>
+                                <a href="<?php echo esc_url( $delete_url ); ?>" class="button button-small button-link-delete" onclick="return confirm('Delete this reservation?');">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
+}
+
+/**
+ * Render Supabase Settings Admin Page
+ */
+function letoile_render_supabase_settings_page() {
+    if ( isset( $_POST['parsa_save_supabase'] ) ) {
+        check_admin_referer( 'parsa_supabase_nonce' );
+        update_option( 'parsa_supabase_url', sanitize_text_field( $_POST['parsa_supabase_url'] ) );
+        update_option( 'parsa_supabase_key', sanitize_text_field( $_POST['parsa_supabase_key'] ) );
+        echo '<div class="notice notice-success is-dismissible"><p>Supabase database credentials saved successfully!</p></div>';
+    }
+
+    $sb_url = get_option( 'parsa_supabase_url', '' );
+    $sb_key = get_option( 'parsa_supabase_key', '' );
+    ?>
+    <div class="wrap">
+        <h1>⚡ Supabase Database Settings</h1>
+        <p>Connect your Parsa WordPress site to your free <strong>Supabase</strong> PostgreSQL cloud database.</p>
+        
+        <form method="post" action="">
+            <?php wp_nonce_field( 'parsa_supabase_nonce' ); ?>
+            <table class="form-table">
+                <tr>
+                    <th><label for="parsa_supabase_url">Supabase Project URL</label></th>
+                    <td>
+                        <input type="url" id="parsa_supabase_url" name="parsa_supabase_url" value="<?php echo esc_attr( $sb_url ); ?>" class="large-text" placeholder="https://your-project-id.supabase.co" />
+                        <p class="description">Found in your Supabase Dashboard -> Project Settings -> API</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="parsa_supabase_key">Supabase Anon API Key</label></th>
+                    <td>
+                        <input type="password" id="parsa_supabase_key" name="parsa_supabase_key" value="<?php echo esc_attr( $sb_key ); ?>" class="large-text" placeholder="eyJhYmdj... anon key" />
+                        <p class="description">Found in your Supabase Dashboard -> Project Settings -> API -> Project API Keys (anon public key)</p>
+                    </td>
+                </tr>
+            </table>
+            <p class="submit">
+                <input type="submit" name="parsa_save_supabase" class="button button-primary" value="Save Supabase Settings" />
+            </p>
+        </form>
+    </div>
+    <?php
+}
+
