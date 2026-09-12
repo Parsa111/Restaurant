@@ -1,0 +1,88 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "color": {
+      "palette": [
+        {
+          "name": "Obsidian Deep",
+          "slug": "obsidian-deep",
+          "color": "#0a0b0e"
+        },
+        {
+          "name": "Obsidian Surface",
+          "slug": "obsidian-surface",
+          "color": "#12141a"
+        },
+        {
+          "name": "Champagne Gold",
+          "slug": "champagne-gold",
+          "color": "#d4af37"
+        },
+        {
+          "name": "Gold Light",
+          "slug": "gold-light",
+          "color": "#f3e5ab"
+        },
+        {
+          "name": "Ivory Silk",
+          "slug": "ivory-silk",
+          "color": "#f8f6f0"
+        },
+        {
+          "name": "Muted Platinum",
+          "slug": "muted-platinum",
+          "color": "#b5b0a3"
+        },
+        {
+          "name": "Crimson Accent",
+          "slug": "crimson-accent",
+          "color": "#8b261d"
+        }
+      ],
+      "custom": true,
+      "customGradient": true,
+      "gradients": [
+        {
+          "name": "Luxury Gold Gradient",
+          "slug": "luxury-gold",
+          "gradient": "linear-gradient(135deg, #f7e7b4 0%, #d4af37 50%, #aa820a 100%)"
+        }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "fontFamily": "'Playfair Display', serif",
+          "name": "Playfair Display",
+          "slug": "serif"
+        },
+        {
+          "fontFamily": "'Plus Jakarta Sans', sans-serif",
+          "name": "Plus Jakarta Sans",
+          "slug": "sans"
+        },
+        {
+          "fontFamily": "'Cinzel', serif",
+          "name": "Cinzel Luxury",
+          "slug": "accent"
+        }
+      ]
+    },
+    "layout": {
+      "contentSize": "960px",
+      "wideSize": "1280px"
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var(--wp--preset--color--obsidian-deep)",
+      "text": "var(--wp--preset--color--ivory-silk)"
+    },
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--sans)",
+      "lineHeight": "1.65"
+    }
+  }
+}

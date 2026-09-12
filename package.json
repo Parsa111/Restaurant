@@ -1,0 +1,22 @@
+{
+  "name": "letoile-luxury-bistro-wordpress-theme",
+  "version": "1.0.0",
+  "description": "L'Étoile Dorée - Ultra-Luxury Restaurant & Bistro WordPress Theme",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build:zip": "node scripts/build-zip.js"
+  },
+  "keywords": [
+    "wordpress",
+    "restaurant",
+    "bistro",
+    "luxury",
+    "fine-dining",
+    "reservations",
+    "menu"
+  ],
+  "author": "L'Étoile Dorée",
+  "license": "GPL-2.0-or-later"
+}
