@@ -2,9 +2,11 @@
   "version": 2,
   "name": "parsa-restaurant-website",
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/preview", "destination": "/preview/index.html" },
-    { "source": "/preview/", "destination": "/preview/index.html" }
+  "routes": [
+    { "src": "/admin", "dest": "/admin.html" },
+    { "src": "/admin.html", "dest": "/admin.html" },
+    { "src": "/preview/index.html", "dest": "/preview/index.html" },
+    { "src": "/preview", "dest": "/preview/index.html" },
+    { "src": "/preview/", "dest": "/preview/index.html" }
   ]
 }
