@@ -11,8 +11,323 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Inlined Theme CSS for Vercel -->
-<style>
+    <!-- Complete Combined Inlined Styles (style.css + main.css) -->
+    <style>
+/*
+Theme Name: Parsa - Restaurant & Bistro
+Theme URI: https://parsa-restaurant.com
+Author: Parsa Team
+Author URI: https://parsa-restaurant.com
+Description: Clean, modern, custom WordPress theme for Parsa Restaurant featuring digital menus, dietary filtering, real-time table reservations, dark obsidian theme with gold accents, and simple clear wording.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: parsa-bistro
+Tags: restaurant, food-and-drink, custom-menu, custom-logo, featured-images, full-site-editing, grid-layout, dark-theme, responsive-layout
+*/
+
+/* ==========================================================================
+   CSS VARIABLES & DESIGN SYSTEM
+   ========================================================================== */
+:root {
+  /* Color Palette */
+  --bg-primary: #0a0b0e;
+  --bg-secondary: #12141a;
+  --bg-card: rgba(22, 25, 34, 0.7);
+  --bg-card-hover: rgba(28, 32, 44, 0.85);
+  --bg-glass: rgba(18, 20, 27, 0.65);
+  --bg-glass-modal: rgba(14, 16, 22, 0.95);
+
+  --gold-primary: #d4af37;
+  --gold-light: #f3e5ab;
+  --gold-vibrant: #e6ca65;
+  --gold-dark: #997a15;
+  --gold-gradient: linear-gradient(135deg, #f7e7b4 0%, #d4af37 50%, #aa820a 100%);
+  --gold-glow: 0 0 25px rgba(212, 175, 55, 0.25);
+  --gold-glow-intense: 0 0 35px rgba(212, 175, 55, 0.45);
+
+  --crimson-accent: #8b261d;
+  --crimson-glow: 0 0 20px rgba(139, 38, 29, 0.3);
+
+  --text-primary: #f8f6f0;
+  --text-secondary: #b5b0a3;
+  --text-muted: #7e7a70;
+  --text-gold: #e5c56c;
+
+  --border-subtle: rgba(212, 175, 55, 0.15);
+  --border-gold: rgba(212, 175, 55, 0.35);
+  --border-bright: rgba(212, 175, 55, 0.7);
+
+  /* Typography */
+  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-accent: 'Cinzel', 'Playfair Display', serif;
+
+  /* Transitions & Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --shadow-card: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 0 1px 1px var(--border-subtle);
+}
+
+/* ==========================================================================
+   BASE & RESET
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--gold-light);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+a:hover {
+  color: var(--gold-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.gold-text {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.gold-accent {
+  color: var(--gold-primary);
+}
+
+.font-accent {
+  font-family: var(--font-accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   LAYOUT & CONTAINER
+   ========================================================================== */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.container-narrow {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.section-subtitle {
+  font-family: var(--font-accent);
+  color: var(--gold-primary);
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.section-subtitle::before,
+.section-subtitle::after {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--gold-gradient);
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+
+/* ==========================================================================
+   BUTTONS & UI COMPONENTS
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.85rem;
+  font-family: var(--font-accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn-gold {
+  background: var(--gold-gradient);
+  color: #0a0b0e;
+  border-color: var(--gold-primary);
+  box-shadow: var(--gold-glow);
+}
+
+.btn-gold:hover {
+  color: #000;
+  box-shadow: var(--gold-glow-intense);
+  transform: translateY(-2px);
+}
+
+.btn-outline-gold {
+  background: rgba(212, 175, 55, 0.05);
+  color: var(--gold-light);
+  border-color: var(--border-gold);
+  backdrop-filter: blur(8px);
+}
+
+.btn-outline-gold:hover {
+  background: var(--gold-gradient);
+  color: #0a0b0e;
+  border-color: var(--gold-primary);
+  box-shadow: var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--border-gold);
+  color: var(--gold-light);
+  transform: translateY(-2px);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.badge-gold {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--gold-light);
+  border: 1px solid var(--border-gold);
+}
+
+.badge-vegan {
+  background: rgba(46, 125, 50, 0.2);
+  color: #81c784;
+  border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.badge-gluten-free {
+  background: rgba(239, 108, 0, 0.2);
+  color: #ffb74d;
+  border: 1px solid rgba(255, 152, 0, 0.4);
+}
+
+.badge-chef {
+  background: rgba(139, 38, 29, 0.25);
+  color: #ff8a80;
+  border: 1px solid rgba(211, 47, 47, 0.4);
+}
+
+.badge-spicy {
+  background: rgba(198, 40, 40, 0.25);
+  color: #ef9a9a;
+  border: 1px solid rgba(244, 67, 54, 0.4);
+}
+
+/* Glass Card */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-gold);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), var(--gold-glow);
+}
+
+
 /* ==========================================================================
    L'ÉTOILE DORÉE - COMPLETE LUXURY STYLESHEET
    ========================================================================== */
@@ -1195,9 +1510,10 @@
   }
 }
 
-</style>
+    </style>
 </head>
 <body>
+
 
 <!-- Top Info Bar -->
 <div class="top-bar">
@@ -2229,7 +2545,10 @@
 
 <!-- Scripts -->
 <!-- Inlined Theme JS for Vercel -->
-<script>
+
+
+    <!-- Complete Inlined JS Scripts -->
+    <script>
 /**
  * L'Étoile Dorée - Main JavaScript
  */
@@ -2501,6 +2820,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-</script>
+    </script>
 </body>
 </html>
