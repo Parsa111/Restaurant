@@ -81,7 +81,55 @@ document.addEventListener('DOMContentLoaded', () => {
             // Generate Booking Code
             const bookingCode = 'PARSA-' + Math.random().toString(36).substring(2, 7).toUpperCase();
 
-            // Send Reservation to WordPress Backend API
+            // Direct Supabase Database Submission
+            const supabaseUrl = window.PARSA_SUPABASE_URL || localStorage.getItem('parsa_supabase_url');
+            const supabaseKey = window.PARSA_SUPABASE_KEY || localStorage.getItem('parsa_supabase_key');
+
+            if (supabaseUrl && supabaseKey) {
+                fetch(supabaseUrl.replace(/\/$/, '') + '/rest/v1/reservations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': supabaseKey,
+                        'Authorization': 'Bearer ' + supabaseKey,
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        booking_code: bookingCode,
+                        guest_name: name,
+                        guest_email: email,
+                        guest_phone: phone,
+                        res_date: date,
+                        res_time: displayTime,
+                        res_guests: parseInt(guests),
+                        res_seating: seating,
+                        res_notes: notes,
+                        status: 'Confirmed'
+                    })
+                }).then(() => console.log('Successfully saved reservation to Supabase database!'))
+                .catch(err => console.warn('Supabase database sync note:', err));
+            }
+
+            // Save to local storage cache as backup
+            try {
+                const existing = JSON.parse(localStorage.getItem('parsa_reservations') || '[]');
+                existing.unshift({
+                    code: bookingCode,
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    date: date,
+                    time: displayTime,
+                    guests: guests,
+                    seating: seating,
+                    notes: notes,
+                    status: 'Confirmed',
+                    created_at: new Date().toISOString()
+                });
+                localStorage.setItem('parsa_reservations', JSON.stringify(existing));
+            } catch(e) {}
+
+            // Send Reservation to WordPress Backend API if connected
             const backendEndpoint = window.letoileSettings?.ajaxUrl || WORDPRESS_BACKEND_URL;
 
             if (window.jQuery && window.letoileSettings) {
@@ -121,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         submitBtn.innerText = originalText;
                         submitBtn.disabled = false;
                     }
-                }, 500);
+                }, 400);
             }
         });
     }
