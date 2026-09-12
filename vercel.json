@@ -1,11 +1,5 @@
 {
   "version": 2,
   "name": "parsa-restaurant-website",
-  "cleanUrls": true,
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/preview/$1"
-    }
-  ]
+  "cleanUrls": true
 }
