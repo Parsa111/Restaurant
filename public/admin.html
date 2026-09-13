@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parsa Restaurant — Admin Dashboard</title>
+    <title>Parsa Restaurant — Live Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,6 +16,7 @@
             --text-light: #f8f6f0;
             --text-muted: #8a8880;
             --border: rgba(212, 175, 55, 0.2);
+            --danger: #ef5350;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -32,6 +33,8 @@
             padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
             margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         .admin-title {
             font-size: 1.8rem;
@@ -63,6 +66,7 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             overflow: hidden;
+            overflow-x: auto;
         }
         table {
             width: 100%;
@@ -97,12 +101,26 @@
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
         }
         .btn-outline {
             background: transparent;
             color: var(--gold);
             border: 1px solid var(--gold);
+        }
+        .btn-danger {
+            background: rgba(239, 83, 80, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 83, 80, 0.4);
+            padding: 0.35rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        .btn-danger:hover {
+            background: var(--danger);
+            color: #fff;
         }
     </style>
 </head>
@@ -110,11 +128,12 @@
 
 <div class="admin-header">
     <div class="admin-title">
-        👑 Parsa Restaurant — Admin Dashboard
+        👑 Parsa Restaurant — Live Admin Dashboard
     </div>
-    <div>
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <button class="btn btn-outline" onclick="loadReservations()">🔄 Refresh Live Database</button>
+        <button class="btn" onclick="exportCSV()">📥 Export to CSV</button>
         <a href="/" class="btn btn-outline">← Back to Main Website</a>
-        <button class="btn" onclick="exportCSV()">Export to CSV</button>
     </div>
 </div>
 
@@ -128,8 +147,8 @@
         <div class="stat-num" id="stat-guests">0</div>
     </div>
     <div class="stat-card">
-        <div style="color: var(--text-muted); font-size: 0.85rem;">Status</div>
-        <div class="stat-num" style="color: #46b450; font-size: 1.3rem;">● Live & Ready</div>
+        <div style="color: var(--text-muted); font-size: 0.85rem;">Supabase Database</div>
+        <div class="stat-num" id="stat-status" style="color: #46b450; font-size: 1.3rem;">● Connected</div>
     </div>
 </div>
 
@@ -144,53 +163,145 @@
                 <th>Seating Area</th>
                 <th>Phone</th>
                 <th>Email</th>
-                <th>Notes</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody id="reservations-table-body">
             <tr>
-                <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading reservations...</td>
+                <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">Fetching live reservations from Supabase database...</td>
             </tr>
         </tbody>
     </table>
 </div>
 
 <script>
-    function loadReservations() {
+    const SUPABASE_URL = 'https://praocrdvlavznipehkek.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByYW9jcmR2bGF2em5pcGVoa2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNjE4MDgsImV4cCI6MjEwNDgzNzgwOH0.iSSN3G3m101wgesZpEEw1dMqZVJ1jnCNBoH4etOrGEA';
+
+    let currentReservations = [];
+
+    async function loadReservations() {
         const tbody = document.getElementById('reservations-table-body');
-        const reservations = JSON.parse(localStorage.getItem('parsa_reservations') || '[]');
-        
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">Connecting to Supabase...</td></tr>';
+
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations?select=*&order=created_at.desc`, {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                }
+            });
+
+            if (res.ok) {
+                currentReservations = await res.json();
+                renderTable(currentReservations);
+            } else {
+                fallbackLocalStorage();
+            }
+        } catch (err) {
+            console.warn('Supabase fetch failed, falling back to local storage cache:', err);
+            fallbackLocalStorage();
+        }
+    }
+
+    function fallbackLocalStorage() {
+        try {
+            currentReservations = JSON.parse(localStorage.getItem('parsa_reservations') || '[]');
+            renderTable(currentReservations);
+        } catch(e) {
+            renderTable([]);
+        }
+    }
+
+    function renderTable(reservations) {
+        const tbody = document.getElementById('reservations-table-body');
         document.getElementById('stat-total').textContent = reservations.length;
+        
         let totalGuests = 0;
-        reservations.forEach(r => totalGuests += parseInt(r.guests || 2));
+        reservations.forEach(r => totalGuests += parseInt(r.res_guests || r.guests || 2));
         document.getElementById('stat-guests').textContent = totalGuests;
 
         if (reservations.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">No reservations booked yet. Form submissions will appear here in real time.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">No reservations found in database. Bookings will appear here live.</td></tr>';
             return;
         }
 
-        tbody.innerHTML = reservations.map(r => `
-            <tr>
-                <td><span class="code-badge">${r.code || 'PARSA-001'}</span></td>
-                <td><strong>${r.name || 'Guest'}</strong></td>
-                <td>${r.date || ''} @ ${r.time || ''}</td>
-                <td>${r.guests || 2} People</td>
-                <td>${r.seating || 'Main Dining Room'}</td>
-                <td>${r.phone || '-'}</td>
-                <td>${r.email || '-'}</td>
-                <td><small style="color: var(--text-muted);">${r.notes || 'None'}</small></td>
-            </tr>
-        `).join('');
+        tbody.innerHTML = reservations.map(r => {
+            const id = r.id;
+            const code = r.booking_code || r.code || 'PARSA-001';
+            const name = r.guest_name || r.name || 'Guest';
+            const date = r.res_date || r.date || '';
+            const time = r.res_time || r.time || '';
+            const guests = r.res_guests || r.guests || 2;
+            const seating = r.res_seating || r.seating || 'Main Dining Room';
+            const phone = r.guest_phone || r.phone || '-';
+            const email = r.guest_email || r.email || '-';
+
+            return `
+                <tr>
+                    <td><span class="code-badge">${code}</span></td>
+                    <td><strong>${name}</strong></td>
+                    <td>${date} @ ${time}</td>
+                    <td>${guests} Guests</td>
+                    <td>${seating}</td>
+                    <td>${phone}</td>
+                    <td><small style="color: var(--text-muted);">${email}</small></td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteReservation(${id}, '${code}')">🗑️ Delete</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    async function deleteReservation(id, code) {
+        if (!confirm(`Are you sure you want to delete reservation ${code}?`)) return;
+
+        if (id) {
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/reservations?id=eq.${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                if (res.ok) {
+                    alert(`Reservation ${code} deleted from Supabase database!`);
+                    loadReservations();
+                    return;
+                }
+            } catch (err) {
+                console.error('Delete error:', err);
+            }
+        }
+
+        // Local storage delete fallback
+        try {
+            let local = JSON.parse(localStorage.getItem('parsa_reservations') || '[]');
+            local = local.filter(r => r.code !== code);
+            localStorage.setItem('parsa_reservations', JSON.stringify(local));
+            alert(`Reservation ${code} removed!`);
+            loadReservations();
+        } catch(e) {}
     }
 
     function exportCSV() {
-        const reservations = JSON.parse(localStorage.getItem('parsa_reservations') || '[]');
-        if (reservations.length === 0) { alert('No reservations to export yet.'); return; }
+        if (currentReservations.length === 0) { alert('No reservations to export yet.'); return; }
         
         let csv = 'Code,Name,Email,Phone,Date,Time,Guests,Seating,Notes\n';
-        reservations.forEach(r => {
-            csv += `"${r.code}","${r.name}","${r.email}","${r.phone}","${r.date}","${r.time}","${r.guests}","${r.seating}","${r.notes || ''}"\n`;
+        currentReservations.forEach(r => {
+            const code = r.booking_code || r.code || '';
+            const name = r.guest_name || r.name || '';
+            const email = r.guest_email || r.email || '';
+            const phone = r.guest_phone || r.phone || '';
+            const date = r.res_date || r.date || '';
+            const time = r.res_time || r.time || '';
+            const guests = r.res_guests || r.guests || '';
+            const seating = r.res_seating || r.seating || '';
+            const notes = r.res_notes || r.notes || '';
+            csv += `"${code}","${name}","${email}","${phone}","${date}","${time}","${guests}","${seating}","${notes}"\n`;
         });
 
         const blob = new Blob([csv], { type: 'text/csv' });
