@@ -15,7 +15,7 @@ try {
     }
 
     // Use PowerShell Compress-Archive for reliable native Windows ZIP creation
-    const psCommand = `powershell -NoProfile -Command "Compress-Archive -Path '${themeDir}' -DestinationPath '${outputZip}' -Force"`;
+    const psCommand = `powershell -NoProfile -Command "Compress-Archive -Path '${themeDir}\\*' -DestinationPath '${outputZip}' -Force"`;
     execSync(psCommand, { stdio: 'inherit' });
 
     const stats = fs.statSync(outputZip);

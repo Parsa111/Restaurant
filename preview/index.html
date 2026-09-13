@@ -1517,6 +1517,7 @@ h1, h2, h3, h4, h5, h6 {
 
 
 
+
   <!-- Top Info Bar -->
   <div class="top-bar">
     <div class="container">
@@ -2767,6 +2768,564 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+/**
+ * Parsa Restaurant & Bistro - Table Reservation Engine
+ */
+
+// ⚙️ WORDPRESS & VERCEL CONFIGURATION
+// Automatically detects your Vercel link (e.g. https://your-site.vercel.app) or WordPress backend:
+const WORDPRESS_BACKEND_URL = window.letoileSettings?.ajaxUrl || window.location.origin + '/wp-admin/admin-ajax.php';
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Seating Ambiance Selector
+    const seatingCards = document.querySelectorAll('.seating-card');
+    const selectedSeatingInput = document.getElementById('selected_seating');
+
+    seatingCards.forEach(card => {
+        card.addEventListener('click', () => {
+            seatingCards.forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            const area = card.getAttribute('data-area');
+            if (selectedSeatingInput) {
+                selectedSeatingInput.value = area;
+            }
+        });
+    });
+
+    // 2. Service Time Slot Selector
+    const timeSlotBtns = document.querySelectorAll('.time-slot-btn');
+    const selectedTimeInput = document.getElementById('selected_time');
+
+    timeSlotBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            timeSlotBtns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const time = btn.getAttribute('data-time');
+            if (selectedTimeInput) {
+                selectedTimeInput.value = time;
+            }
+        });
+    });
+
+    // 3. Reservation Form Submission
+    const reservationForm = document.getElementById('letoile-reservation-form');
+    const modal = document.getElementById('reservation-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+
+    if (reservationForm) {
+        reservationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('btn-submit-booking');
+            const originalText = submitBtn ? submitBtn.innerText : 'Confirm';
+            if (submitBtn) {
+                submitBtn.innerText = 'Securing Table...';
+                submitBtn.disabled = true;
+            }
+
+            const name = document.getElementById('guest_name')?.value || 'Valued Guest';
+            const email = document.getElementById('guest_email')?.value || '';
+            const phone = document.getElementById('guest_phone')?.value || '';
+            const date = document.getElementById('res_date')?.value || '';
+            const time = selectedTimeInput?.value || '19:00';
+            const guests = document.getElementById('res_guests')?.value || '2';
+            const seating = selectedSeatingInput?.value || 'Main Dining Room';
+            const notes = document.getElementById('res_notes')?.value || '';
+
+            // Format readable time
+            let displayTime = time; //
+            if (time.includes(':')) {
+                const parts = time.split(':');
+                const hour = parseInt(parts[0], 10);
+                const ampm = hour >= 12 ? 'PM' : 'AM';
+                const formattedHour = hour % 12 || 12;
+                displayTime = `${formattedHour}:${parts[1]} ${ampm}`;
+            }
+
+            const formattedDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+
+            // Generate Booking Code
+            const bookingCode = 'PARSA-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+
+            // Direct Supabase Database Submission
+            const supabaseUrl = window.PARSA_SUPABASE_URL || localStorage.getItem('parsa_supabase_url') || 'https://praocrdvlavznipehkek.supabase.co';
+            const supabaseKey = window.PARSA_SUPABASE_KEY || localStorage.getItem('parsa_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByYW9jcmR2bGF2em5pcGVoa2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNjE4MDgsImV4cCI6MjEwNDgzNzgwOH0.iSSN3G3m101wgesZpEEw1dMqZVJ1jnCNBoH4etOrGEA';
+
+            if (supabaseUrl && supabaseKey) {
+                fetch(supabaseUrl.replace(/\/$/, '') + '/rest/v1/reservations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': supabaseKey,
+                        'Authorization': 'Bearer ' + supabaseKey,
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        booking_code: bookingCode,
+                        guest_name: name,
+                        guest_email: email,
+                        guest_phone: phone,
+                        res_date: date,
+                        res_time: displayTime,
+                        res_guests: parseInt(guests),
+                        res_seating: seating,
+                        res_notes: notes,
+                        status: 'Confirmed'
+                    })
+                }).then(() => console.log('Successfully saved reservation to Supabase database!'))
+                .catch(err => console.warn('Supabase database sync note:', err));
+            }
+
+            // Save to local storage cache as backup
+            try {
+                const existing = JSON.parse(localStorage.getItem('parsa_reservations') || '[]');
+                existing.unshift({
+                    code: bookingCode,
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    date: date,
+                    time: displayTime,
+                    guests: guests,
+                    seating: seating,
+                    notes: notes,
+                    status: 'Confirmed',
+                    created_at: new Date().toISOString()
+                });
+                localStorage.setItem('parsa_reservations', JSON.stringify(existing));
+            } catch(e) {}
+
+            // Send Reservation to WordPress Backend API if connected
+            const backendEndpoint = window.letoileSettings?.ajaxUrl || WORDPRESS_BACKEND_URL;
+
+            if (window.jQuery && window.letoileSettings) {
+                window.jQuery.ajax({
+                    url: backendEndpoint,
+                    type: 'POST',
+                    data: {
+                        action: 'letoile_submit_reservation',
+                        security: window.letoileSettings.nonce,
+                        guest_name: name,
+                        guest_email: email,
+                        guest_phone: phone,
+                        res_date: date,
+                        res_time: displayTime,
+                        res_guests: guests,
+                        res_seating: seating,
+                        res_notes: notes
+                    },
+                    success: function(response) {
+                        displayConfirmationModal(response.data?.bookingCode || bookingCode, name, formattedDate + ' at ' + displayTime, guests, seating);
+                    },
+                    error: function() {
+                        displayConfirmationModal(bookingCode, name, formattedDate + ' at ' + displayTime, guests, seating);
+                    },
+                    complete: function() {
+                        if (submitBtn) {
+                            submitBtn.innerText = originalText;
+                            submitBtn.disabled = false;
+                        }
+                    }
+                });
+            } else {
+                // Standalone / Vercel Live Preview Simulation
+                setTimeout(() => {
+                    displayConfirmationModal(bookingCode, name, formattedDate + ' at ' + displayTime, guests, seating);
+                    if (submitBtn) {
+                        submitBtn.innerText = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 400);
+            }
+        });
+    }
+
+    function displayConfirmationModal(code, name, datetime, guests, seating) {
+        document.getElementById('conf-code').textContent = code;
+        document.getElementById('conf-name').textContent = name;
+        document.getElementById('conf-datetime').textContent = datetime;
+        document.getElementById('conf-guests').textContent = guests + (parseInt(guests) === 1 ? ' Person' : ' People');
+        document.getElementById('conf-seating').textContent = seating;
+
+        if (modal) {
+            modal.classList.add('open');
+        }
+    }
+
+    if (closeModalBtn && modal) {
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('open');
+            reservationForm.reset();
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('open');
+            }
+        });
+    }
+});
+
+<!-- Dish Detail Interactive Modal -->
+<div class="dish-detail-modal" id="dish-detail-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(8, 9, 12, 0.92); z-index: 10000; backdrop-filter: blur(20px); align-items: center; justify-content: center; padding: 1.5rem;">
+  <div class="glass-card dish-modal-content" style="max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 0; border: 1px solid var(--border-gold); border-radius: var(--radius-md);">
+    <button class="modal-close-btn" id="close-dish-modal-btn" style="position: absolute; top: 1rem; right: 1rem; background: rgba(10, 11, 14, 0.85); border: 1px solid var(--border-gold); color: var(--gold-light); width: 38px; height: 38px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;">&times;</button>
+    
+    <div style="height: 300px; width: 100%; position: relative; overflow: hidden;">
+      <img id="dish-modal-img" src="" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+      <div style="position: absolute; bottom: 1rem; right: 1rem; background: rgba(10, 11, 14, 0.88); border: 1px solid var(--gold-primary); padding: 0.4rem 1.15rem; border-radius: 20px; color: var(--gold-light); font-weight: 700; font-size: 1.25rem;" id="dish-modal-price">$0</div>
+    </div>
+    
+    <div style="padding: 2rem;">
+      <div id="dish-modal-badges" style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;"></div>
+      <h2 id="dish-modal-title" style="font-size: 2rem; margin-bottom: 1rem; color: var(--text-primary);">Dish Title</h2>
+      
+      <div style="margin-bottom: 1.5rem;">
+        <h4 style="font-family: var(--font-accent); color: var(--gold-primary); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">About This Dish</h4>
+        <p id="dish-modal-desc" style="color: var(--text-secondary); line-height: 1.7; font-size: 1.05rem;"></p>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <h4 style="font-family: var(--font-accent); color: var(--gold-primary); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Fresh Ingredients Used</h4>
+        <ul id="dish-modal-ingredients" style="color: var(--text-primary); padding-left: 1.25rem; line-height: 1.6; font-size: 0.95rem;"></ul>
+      </div>
+
+      <div style="background: rgba(212, 175, 55, 0.08); border: 1px solid var(--border-gold); padding: 1rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.75rem; display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 1.5rem;">🍷</span>
+        <div>
+          <strong style="color: var(--gold-light); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; display: block;">Recommended Drink Pairing</strong>
+          <span id="dish-modal-pairing" style="color: var(--text-secondary); font-size: 0.95rem;"></span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap;">
+        <button class="btn btn-gold" id="dish-reserve-btn" style="width: 100%;">
+          Book a Table to Enjoy This Dish →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- Complete Inlined JS Scripts -->
+    <script>
+/**
+ * L'Étoile Dorée - Main JavaScript
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Sticky Header Scroll Effect
+    const siteHeader = document.getElementById('site-header');
+    if (siteHeader) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                siteHeader.classList.add('scrolled');
+            } else {
+                siteHeader.classList.remove('scrolled');
+            }
+        });
+    }
+
+    // 2. Mobile Menu Drawer Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+    const mobileDrawerClose = document.getElementById('mobile-drawer-close');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    if (mobileMenuBtn && mobileDrawer) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileDrawer.style.display = 'flex';
+        });
+
+        if (mobileDrawerClose) {
+            mobileDrawerClose.addEventListener('click', () => {
+                mobileDrawer.style.display = 'none';
+            });
+        }
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileDrawer.style.display = 'none';
+            });
+        });
+    }
+
+    // 3. Interactive Digital Menu Category & Dietary Filtering
+    const categoryTabs = document.querySelectorAll('.menu-tab-btn');
+    const dietaryChips = document.querySelectorAll('.dietary-chip');
+    const searchInput = document.getElementById('menu-search-input');
+    const menuItems = document.querySelectorAll('.menu-item-row');
+
+    let currentCategory = 'all';
+    let currentDiet = 'all';
+    let currentSearch = '';
+
+    function filterMenuItems() {
+        menuItems.forEach(item => {
+            const itemCat = item.getAttribute('data-category') || '';
+            const itemDiet = item.getAttribute('data-diet') || '';
+            const itemTitle = (item.getAttribute('data-title') || '').toLowerCase();
+            const itemDesc = (item.querySelector('.menu-item-description')?.textContent || '').toLowerCase();
+
+            const matchCat = (currentCategory === 'all' || itemCat.includes(currentCategory));
+            const matchDiet = (currentDiet === 'all' || itemDiet.includes(currentDiet));
+            const matchSearch = (!currentSearch || itemTitle.includes(currentSearch) || itemDesc.includes(currentSearch));
+
+            if (matchCat && matchDiet && matchSearch) {
+                item.style.display = 'flex';
+                item.style.animation = 'fadeIn 0.35s ease forwards';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // Category click handler
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            categoryTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentCategory = tab.getAttribute('data-category');
+            filterMenuItems();
+        });
+    });
+
+    // Dietary click handler
+    dietaryChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            dietaryChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            currentDiet = chip.getAttribute('data-diet');
+            filterMenuItems();
+        });
+    });
+
+    // Search input handler
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value.toLowerCase().trim();
+            filterMenuItems();
+        });
+    }
+
+    // 4. Smooth Anchor Scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (targetId && targetId !== '#') {
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        });
+    });
+
+    // 5. Interactive Dish Detail Modal (Simple Clear Words & Detailed Food Info)
+    const DISH_DETAILS = {
+        'Parsa Special Wagyu Steak': {
+            price: '$145',
+            image: '/assets/images/dish-wagyu.jpg',
+            badges: ['⭐ Parsa Special', '🌾 Gluten-Free'],
+            description: 'Our signature Wagyu steak is cooked over open wood flame until soft and juicy. We season it with sea salt, garlic butter, and fresh herbs so every bite melts in your mouth. Served with warm mushroom sauce and golden roasted vegetables on the side.',
+            ingredients: [
+                'A5 Japanese Wagyu Beef (Tender & Juicy)',
+                'Fresh Garlic & Butter',
+                'Sautéed Wild Mushrooms',
+                'Coarse Sea Salt & Black Pepper',
+                'Fresh Rosemary & Thyme'
+            ],
+            pairing: 'Pairs best with a glass of rich, warm Red Wine (Cabernet Sauvignon).'
+        },
+        'Handmade Truffle Pasta': {
+            price: '$68',
+            image: '/assets/images/dish-pasta.jpg',
+            badges: ['⭐ Chef\'s Pick', '🧀 Vegetarian'],
+            description: 'Freshly rolled egg pasta noodles cooked to soft perfection and tossed in a rich, creamy Parmigiano cheese sauce. Right before serving, our chef shaves generous slices of real aromatic black truffle right over your bowl for a warm, savory flavor.',
+            ingredients: [
+                'Fresh Handmade Egg Ribbon Pasta',
+                'Shaved Aromatic Black Truffle',
+                'Aged Parmigiano-Reggiano Cheese',
+                'Heavy Cream & Butter Sauce',
+                'Fresh Chopped Parsley'
+            ],
+            pairing: 'Pairs best with a crisp, chilled White Wine (Chardonnay).'
+        },
+        'Grilled Lobster Tail': {
+            price: '$115',
+            image: '/assets/images/dish-lobster.jpg',
+            badges: ['⭐ Chef\'s Pick', '🌾 Gluten-Free'],
+            description: 'Fresh sweet Atlantic lobster tail lightly grilled with melted lemon garlic butter. Served with a spoonful of black caviar and warm roasted greens for a clean, rich seafood taste.',
+            ingredients: [
+                'Fresh Sweet Atlantic Lobster Tail',
+                'Premium Black Sturgeon Caviar',
+                'Clarified Lemon Garlic Butter',
+                'Fresh Lemon Juice & Herbs',
+                'Baby Roasted Greens'
+            ],
+            pairing: 'Pairs best with a glass of chilled French Champagne or Sparkling Wine.'
+        },
+        'Chocolate Gold Cake': {
+            price: '$38',
+            image: '/assets/images/dish-dessert.jpg',
+            badges: ['👑 House Favorite', '🧀 Vegetarian'],
+            description: 'A rich dark chocolate dome filled with smooth hazelnut cream and sweet red raspberries. When brought to your table, warm berry sauce is poured over the dome to gently melt the chocolate.',
+            ingredients: [
+                'Dark Belgian Chocolate',
+                'Creamy Roasted Hazelnut Center',
+                'Fresh Red Raspberries',
+                'Warm Sweet Berry Sauce',
+                'Edible Gold Leaf Shimmer'
+            ],
+            pairing: 'Pairs best with Dessert Wine or a warm Espresso.'
+        },
+        'Black Caviar Plate': {
+            price: '$185',
+            image: '/assets/images/dish-lobster.jpg',
+            badges: ['👑 House Favorite', '🌾 Gluten-Free'],
+            description: 'Premium chilled black caviar served with warm mini pancakes, smooth lemon cream, and fresh chopped chives. A simple, elegant dish loved by our guests.',
+            ingredients: [
+                'Premium Black Sturgeon Caviar (50g)',
+                'Warm Soft Mini Pancakes (Blinis)',
+                'Whipped Lemon Cream',
+                'Fresh Chopped Chives',
+                'Clarified Butter'
+            ],
+            pairing: 'Pairs best with Ice Cold Vodka or Chilled Champagne.'
+        },
+        'Roasted Beet Salad': {
+            price: '$34',
+            image: '/assets/images/dish-dessert.jpg',
+            badges: ['🌱 Vegan', '🌾 Gluten-Free'],
+            description: 'Sweet oven-roasted red and golden beets sliced thin and served over creamy almond sauce with fresh garden greens and extra virgin olive oil.',
+            ingredients: [
+                'Oven-Roasted Red & Golden Beets',
+                'Whipped Almond Cream',
+                'Fresh Baby Rocket Greens',
+                'Extra Virgin Olive Oil',
+                'Toasted Sea Salt'
+            ],
+            pairing: 'Pairs best with a crisp White Wine (Sauvignon Blanc).'
+        },
+        'Roasted Duck Breast': {
+            price: '$78',
+            image: '/assets/images/dish-wagyu.jpg',
+            badges: ['French Classic'],
+            description: 'Tender duck breast cooked with golden crispy skin and a juicy center. Served with sweet cherry reduction sauce and creamy parsnip mash on the side.',
+            ingredients: [
+                'Fresh Roasted Duck Breast',
+                'Sweet Red Cherry Reduction Sauce',
+                'Creamy Parsnip Purée',
+                'Fresh Thyme & Butter',
+                'Black Pepper'
+            ],
+            pairing: 'Pairs best with a smooth Red Wine (Pinot Noir).'
+        },
+        'Smoked Old Fashioned Cocktail': {
+            price: '$28',
+            image: '/assets/images/dish-cocktail.jpg',
+            badges: ['⭐ Popular Drink', '🌱 Vegan'],
+            description: 'Smooth bourbon whiskey stirred with natural cane sugar and aromatic bitters. Infused with toasted oak wood smoke right at your table for a warm, rich flavor.',
+            ingredients: [
+                'Premium Aged Bourbon Whiskey',
+                'Angostura Aromatic Bitters',
+                'Raw Cane Sugar Syrup',
+                'Fresh Orange Peel',
+                'Toasted Oak Wood Smoke'
+            ],
+            pairing: 'Pairs best with our Grilled Steaks and Wagyu Beef.'
+        }
+    };
+
+    const dishModal = document.getElementById('dish-detail-modal');
+    const closeDishModalBtn = document.getElementById('close-dish-modal-btn');
+    const dishModalImg = document.getElementById('dish-modal-img');
+    const dishModalPrice = document.getElementById('dish-modal-price');
+    const dishModalBadges = document.getElementById('dish-modal-badges');
+    const dishModalTitle = document.getElementById('dish-modal-title');
+    const dishModalDesc = document.getElementById('dish-modal-desc');
+    const dishModalIngredients = document.getElementById('dish-modal-ingredients');
+    const dishModalPairing = document.getElementById('dish-modal-pairing');
+    const dishReserveBtn = document.getElementById('dish-reserve-btn');
+
+    function openDishModal(dishName) {
+        const info = DISH_DETAILS[dishName] || {
+            price: '$45',
+            image: '/assets/images/hero.jpg',
+            badges: ['⭐ Fresh Food'],
+            description: 'Delicious dish prepared fresh daily by our kitchen team with high quality ingredients.',
+            ingredients: ['Fresh Meat & Vegetables', 'House Seasoning', 'Garlic & Olive Oil'],
+            pairing: 'Pairs well with your favorite cold drink or wine.'
+        };
+
+        if (dishModalTitle) dishModalTitle.textContent = dishName;
+        if (dishModalPrice) dishModalPrice.textContent = info.price;
+        if (dishModalImg) dishModalImg.src = info.image;
+        if (dishModalDesc) dishModalDesc.textContent = info.description;
+        if (dishModalPairing) dishModalPairing.textContent = info.pairing;
+
+        if (dishModalBadges) {
+            dishModalBadges.innerHTML = info.badges.map(b => `<span class="badge badge-gold">${b}</span>`).join('');
+        }
+
+        if (dishModalIngredients) {
+            dishModalIngredients.innerHTML = info.ingredients.map(i => `<li>${i}</li>`).join('');
+        }
+
+        if (dishModal) {
+            dishModal.style.display = 'flex';
+        }
+    }
+
+    // Attach click handlers to all food cards and menu rows
+    document.querySelectorAll('.special-card, .menu-item-row').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('a, button')) return; // Ignore inside buttons
+            const title = card.getAttribute('data-title') || 
+                          card.querySelector('.special-title, .menu-item-name')?.textContent?.trim();
+            if (title) {
+                openDishModal(title);
+            }
+        });
+    });
+
+    if (closeDishModalBtn && dishModal) {
+        closeDishModalBtn.addEventListener('click', () => {
+            dishModal.style.display = 'none';
+        });
+        dishModal.addEventListener('click', (e) => {
+            if (e.target === dishModal) {
+                dishModal.style.display = 'none';
+            }
+        });
+    }
+
+    if (dishReserveBtn) {
+        dishReserveBtn.addEventListener('click', () => {
+            if (dishModal) dishModal.style.display = 'none';
+            const notesField = document.getElementById('res_notes');
+            if (notesField && dishModalTitle) {
+                notesField.value = `Interested in ordering: ${dishModalTitle.textContent}`;
+            }
+            const resSection = document.getElementById('reservation');
+            if (resSection) {
+                resSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+});
+
 
 
 /**
