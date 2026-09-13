@@ -1753,10 +1753,89 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Landscape Mobile Devices (Phones in Landscape Mode) */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-section {
+    min-height: auto;
+    padding: 3rem 0 4rem 0;
+  }
+  .mobile-drawer {
+    height: 100dvh;
+    padding: 1rem 1.5rem;
+  }
+  .mobile-nav-list {
+    gap: 0.5rem;
+  }
+  .mobile-nav-link {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.95rem;
+  }
+  .modal-dialog {
+    max-height: 90dvh;
+    padding: 1.25rem;
+    overflow-y: auto;
+  }
+}
+
+/* Ultra-Wide Screens & 4K Displays (>= 1440px) */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1400px;
+  }
+  .hero-content {
+    max-width: 1050px;
+  }
+  .hero-title {
+    font-size: 4.8rem;
+  }
+  .section-title {
+    font-size: 3.5rem;
+  }
+}
+
+/* Universal Touch & Pointer Accessibility */
+@media (pointer: coarse) {
+  .btn, .nav-link, .mobile-nav-link, .dietary-chip, .time-slot-btn, .menu-tab-btn {
+    min-height: 44px;
+  }
+}
+
+/* Reduced Motion Preference Support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-bg-img {
+    animation: none !important;
+  }
+}
+
+/* Print Optimization */
+@media print {
+  .site-header, .top-bar, .hero-actions, .mobile-drawer, .btn, .footer-bottom {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .glass-card, .special-card, .review-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
+
 
     </style>
 </head>
 <body>
+
 
 
 
@@ -2874,6 +2953,9 @@ h1, h2, h3, h4, h5, h6 {
   </div>
 
 
+    
+
+    <!-- Complete Inlined JS Scripts -->
     
 
     <!-- Complete Inlined JS Scripts -->
