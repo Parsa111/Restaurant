@@ -1,5 +1,5 @@
 /**
- * L'Étoile Dorée - Main JavaScript
+ * Parsa Restaurant - Main JavaScript
  */
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Sticky Header Scroll Effect
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             pairing: 'Pairs best with a glass of rich, warm Red Wine (Cabernet Sauvignon).'
         },
-        'Handmade Truffle Pasta': {
+        'Pasta': {
             price: '$68',
             image: '/assets/images/dish-pasta.jpg',
             badges: ['⭐ Chef\'s Pick', '🧀 Vegetarian'],
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const DISH_URL_MAP = {
         'Parsa Special Wagyu Steak': 'dish-wagyu.html',
-        'Handmade Truffle Pasta': 'dish-pasta.html',
+        'Pasta': 'dish-pasta.html',
         'Grilled Lobster Tail': 'dish-lobster.html',
         'Chocolate Gold Cake': 'dish-dessert.html',
         'Black Caviar Plate': 'dish-caviar.html',

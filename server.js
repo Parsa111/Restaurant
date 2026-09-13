@@ -24,7 +24,6 @@ const MIME_TYPES = {
 const server = http.createServer((req, res) => {
     let cleanUrl = req.url.split('?')[0];
 
-    // Default route to preview/index.html
     if (cleanUrl === '/' || cleanUrl === '') {
         cleanUrl = '/preview/index.html';
     }
@@ -63,5 +62,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-    console.log(`✨ L'Étoile Dorée Restaurant Live Preview running at: http://localhost:${PORT}/preview/index.html`);
+    console.log(`✨ Parsa Restaurant Live Preview running at: http://localhost:${PORT}/preview/index.html`);
 });

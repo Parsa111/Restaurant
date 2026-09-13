@@ -63,13 +63,14 @@
         }
         .hero-img-box {
             position: relative;
-            height: 380px;
             width: 100%;
+            overflow: hidden;
+            background: var(--bg-card);
         }
         .hero-img-box img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
+            display: block;
         }
         .price-badge {
             position: absolute;
@@ -150,7 +151,6 @@
         @media (max-width: 600px) {
             .header { padding: 1rem; flex-direction: column; gap: 0.75rem; text-align: center; }
             .container { margin: 1.25rem auto; padding: 0 1rem; }
-            .hero-img-box { height: 220px; }
             .price-badge { font-size: 1.25rem; padding: 0.4rem 1rem; bottom: 1rem; right: 1rem; }
             .card-body { padding: 1.5rem !important; }
             .dish-title { font-size: 1.85rem !important; }
@@ -160,14 +160,12 @@
         @media (max-width: 360px) {
             .header { padding: 0.75rem 0.5rem; }
             .brand-logo { font-size: 1.1rem; }
-            .hero-img-box { height: 180px; }
             .dish-title { font-size: 1.5rem !important; }
             .price-badge { font-size: 1.1rem; padding: 0.3rem 0.75rem; }
             .card-body { padding: 1rem !important; }
         }
         @media (min-width: 1440px) {
             .container { max-width: 1000px; }
-            .hero-img-box { height: 420px; }
             .dish-title { font-size: 2.75rem !important; }
         }
     </style>

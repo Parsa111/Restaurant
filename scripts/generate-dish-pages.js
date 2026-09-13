@@ -21,7 +21,7 @@ const DISHES = [
     },
     {
         filename: 'dish-pasta.html',
-        name: 'Handmade Truffle Pasta',
+        name: 'Pasta',
         price: '$68',
         image: '/assets/images/dish-pasta.jpg',
         badges: ['⭐ Chef\'s Pick', '🧀 Vegetarian'],
