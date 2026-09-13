@@ -30,12 +30,16 @@ if (!fs.existsSync(publicDir)) {
 // Copy assets to public/assets
 copyFolderRecursive(path.join(rootDir, 'assets'), path.join(publicDir, 'assets'));
 
-// Copy root html files to public
-if (fs.existsSync(path.join(rootDir, 'index.html'))) {
-    fs.copyFileSync(path.join(rootDir, 'index.html'), path.join(publicDir, 'index.html'));
-}
-if (fs.existsSync(path.join(rootDir, 'admin.html'))) {
-    fs.copyFileSync(path.join(rootDir, 'admin.html'), path.join(publicDir, 'admin.html'));
-}
+// Copy all root HTML files to public and preview
+const files = fs.readdirSync(rootDir);
+const previewDir = path.join(rootDir, 'preview');
+if (!fs.existsSync(previewDir)) fs.mkdirSync(previewDir, { recursive: true });
 
-console.log('Successfully synced all assets, index.html, and admin.html into public/ folder!');
+files.forEach(file => {
+    if (file.endsWith('.html')) {
+        fs.copyFileSync(path.join(rootDir, file), path.join(publicDir, file));
+        fs.copyFileSync(path.join(rootDir, file), path.join(previewDir, file));
+    }
+});
+
+console.log('Successfully synced all assets and dish detail HTML pages into public/ and preview/ folders!');

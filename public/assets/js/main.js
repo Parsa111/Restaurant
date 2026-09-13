@@ -240,7 +240,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const dishModalPairing = document.getElementById('dish-modal-pairing');
     const dishReserveBtn = document.getElementById('dish-reserve-btn');
 
+    const DISH_URL_MAP = {
+        'Parsa Special Wagyu Steak': 'dish-wagyu.html',
+        'Handmade Truffle Pasta': 'dish-pasta.html',
+        'Grilled Lobster Tail': 'dish-lobster.html',
+        'Chocolate Gold Cake': 'dish-dessert.html',
+        'Black Caviar Plate': 'dish-caviar.html',
+        'Roasted Beet Salad': 'dish-beet.html',
+        'Roasted Duck Breast': 'dish-duck.html',
+        'Smoked Old Fashioned Cocktail': 'dish-cocktail.html'
+    };
+
     function openDishModal(dishName) {
+        const targetUrl = DISH_URL_MAP[dishName];
+        if (targetUrl) {
+            window.location.href = targetUrl;
+            return;
+        }
+
         const info = DISH_DETAILS[dishName] || {
             price: '$45',
             image: '/assets/images/hero.jpg',
