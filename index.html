@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Parsa — Restaurant & Bistro</title>
     <meta name="description" content="Parsa Restaurant & Bistro - Great food, fresh steaks, seafood, handmade pasta, and wine in New York.">
     
@@ -90,6 +90,7 @@ html {
   font-size: 16px;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  overflow-x: hidden;
 }
 
 body {
@@ -102,6 +103,7 @@ body {
   max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
 }
 
 img, video, iframe, canvas, svg {
@@ -560,6 +562,9 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
 }
 
 /* ==========================================================================
@@ -1549,6 +1554,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 2rem 1.5rem;
   overflow-y: auto;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+  -webkit-overflow-scrolling: touch;
 }
 
 .mobile-drawer.open {
@@ -1560,6 +1566,8 @@ body.drawer-open {
   overflow: hidden;
   position: fixed;
   width: 100%;
+  height: 100vh;
+  height: 100dvh;
 }
 
 .mobile-drawer-header {
@@ -1609,11 +1617,13 @@ body.drawer-open {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.85rem 1rem;
+  padding: 1rem 1.25rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   transition: var(--transition-smooth);
+  text-decoration: none;
+  min-height: 56px;
 }
 
 .mobile-nav-link:hover,
@@ -1628,6 +1638,19 @@ body.drawer-open {
 @media (max-width: 992px) {
   .top-bar-info {
     gap: 1rem;
+  }
+  .header-inner {
+    padding: 0.75rem 0;
+  }
+  .brand-title {
+    font-size: 1.15rem;
+  }
+  .header-actions {
+    gap: 0.75rem;
+  }
+  .header-actions .btn {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.75rem;
   }
   .hero-section {
     padding: 4rem 0 5rem 0;
@@ -1670,14 +1693,37 @@ body.drawer-open {
 
 /* Mobile Screens (< 768px) */
 @media (max-width: 768px) {
-  .top-bar .container {
-    justify-content: center;
-    text-align: center;
+  .top-bar {
+    display: none;
   }
-  .top-bar-info {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
+  .header-inner {
+    padding: 0.75rem 0;
+  }
+  .brand-crest {
+    width: 36px;
+    height: 36px;
+  }
+  .brand-title {
+    font-size: 1.1rem;
+  }
+  .brand-tagline {
+    font-size: 0.6rem;
+  }
+  .header-actions .btn {
+    display: none;
+  }
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  .container {
+    padding: 0 1rem;
+  }
+  .hero-section {
+    padding: 3rem 0 5rem 0;
+    min-height: auto;
+  }
+  .hero-title {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
   }
   .hero-badge {
     font-size: 0.7rem;
@@ -1695,6 +1741,9 @@ body.drawer-open {
   }
   .hero-actions .btn {
     width: 100%;
+  }
+  .hero-quick-bar {
+    padding: 1rem;
   }
   .quick-bar-form {
     grid-template-columns: 1fr;
@@ -1802,38 +1851,54 @@ body.drawer-open {
   .menu-item-row {
     padding: 1.25rem;
   }
+  
+  /* Grid improvements */
+  .specials-grid {
+    grid-template-columns: 1fr;
+  }
+  .menu-items-grid {
+    grid-template-columns: 1fr;
+  }
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Small Mobile Screens (< 480px) */
 @media (max-width: 480px) {
   .container {
-    padding: 0 1rem;
+    padding: 0 0.875rem;
   }
   .section {
-    padding: 3.5rem 0;
+    padding: 3rem 0;
   }
   .section-header {
-    margin-bottom: 2.25rem;
+    margin-bottom: 2rem;
   }
   .section-title {
-    font-size: 1.85rem;
+    font-size: 1.5rem;
+  }
+  .section-subtitle {
+    font-size: 0.75rem;
   }
   .seating-options {
     grid-template-columns: 1fr;
   }
   .time-slot-btn {
     flex: 1 1 calc(50% - 0.5rem);
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
   }
   .menu-items-grid {
     grid-template-columns: 1fr;
   }
   .menu-item-row {
     flex-direction: column;
-    padding: 1.25rem;
+    padding: 1rem;
   }
   .menu-item-thumbnail {
     width: 100%;
-    height: 180px;
+    height: 160px;
     margin-bottom: 0.75rem;
   }
   .menu-item-header {
@@ -1842,7 +1907,7 @@ body.drawer-open {
     gap: 0.35rem;
   }
   .menu-item-price {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
   .footer-grid {
     grid-template-columns: 1fr;
@@ -1858,53 +1923,80 @@ body.drawer-open {
   .newsletter-form button {
     width: 100%;
   }
+  .mobile-drawer {
+    padding: 1.5rem 1rem;
+  }
+  .mobile-nav-link {
+    font-size: 1rem;
+    padding: 0.875rem 1rem;
+  }
+  .mobile-drawer-header {
+    margin-bottom: 1.5rem;
+  }
+  .brand-title {
+    font-size: 1rem;
+  }
 }
 
 /* Extra-Small Mobile Devices (< 360px & Foldables) */
 @media (max-width: 360px) {
   .container {
-    padding: 0 0.75rem;
+    padding: 0 0.625rem;
   }
   .brand-title {
-    font-size: 1.05rem;
-    letter-spacing: 0.12em;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
   }
   .brand-crest {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
+  }
+  .brand-tagline {
+    display: none;
   }
   .hero-title {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
   .hero-subtitle {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
   .btn {
-    padding: 0.75rem 1.1rem;
-    font-size: 0.78rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.75rem;
     width: 100%;
   }
   .time-slot-btn {
     flex: 1 1 100%;
   }
   .menu-tab-btn {
-    padding: 0.5rem 0.85rem;
-    font-size: 0.74rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.7rem;
   }
   .special-card-body {
-    padding: 1.25rem;
+    padding: 1rem;
   }
   .special-title {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
   .reservation-wrapper {
-    padding: 1.75rem 1.25rem;
+    padding: 1.25rem 1rem;
   }
   .form-input,
   .form-select,
   .form-textarea {
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
+    padding: 0.7rem 0.875rem;
+    font-size: 0.875rem;
+  }
+  .mobile-menu-toggle {
+    width: 40px;
+    height: 40px;
+  }
+  .mobile-drawer {
+    padding: 1.25rem 0.875rem;
+  }
+  .mobile-nav-link {
+    font-size: 0.95rem;
+    padding: 0.75rem 0.875rem;
   }
 }
 
@@ -2000,6 +2092,18 @@ body.drawer-open {
   .menu-item-thumbnail {
     width: 80px;
     height: 80px;
+  }
+  
+  .form-input,
+  .form-select,
+  .form-textarea {
+    min-height: 48px;
+    font-size: 16px;
+  }
+  
+  .quick-select,
+  .quick-input {
+    min-height: 44px;
   }
 }
 
@@ -2161,6 +2265,13 @@ body.drawer-open {
 
         <!-- Header Action Button -->
         <div class="header-actions">
+          <button class="mobile-menu-toggle" id="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
           <a href="#reservation" class="btn btn-gold" id="header-reserve-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -2170,13 +2281,6 @@ body.drawer-open {
             </svg>
             Book a Table
           </a>
-          <button class="mobile-menu-toggle" id="mobile-menu-btn" aria-label="Toggle Navigation Menu">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-          </button>
         </div>
       </div>
     </div>
