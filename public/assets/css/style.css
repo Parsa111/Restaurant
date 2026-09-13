@@ -83,14 +83,20 @@ body {
   color: var(--text-primary);
   line-height: 1.65;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-img {
+img, video, iframe, canvas, svg {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+a, button, input, select, textarea {
+  touch-action: manipulation;
 }
 
 a {
@@ -109,6 +115,8 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.25;
   color: var(--text-primary);
   letter-spacing: -0.01em;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .gold-text {
@@ -133,12 +141,14 @@ h1, h2, h3, h4, h5, h6 {
    LAYOUT & CONTAINER
    ========================================================================== */
 .container {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 .container-narrow {
+  width: 100%;
   max-width: 960px;
   margin: 0 auto;
   padding: 0 1.5rem;

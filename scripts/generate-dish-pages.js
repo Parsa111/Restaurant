@@ -268,18 +268,53 @@ function generateDishHtml(dish) {
             color: var(--gold-light);
             border: 1px solid var(--border-gold);
         }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem 1.75rem;
+            min-height: 44px;
+            font-family: var(--font-accent);
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--gold-light);
+            border: 1px solid var(--border-gold);
+        }
         .btn-outline:hover {
             background: rgba(212, 175, 55, 0.15);
         }
         @media (max-width: 600px) {
             .header { padding: 1rem; flex-direction: column; gap: 0.75rem; text-align: center; }
-            .container { margin: 1.5rem auto; padding: 0 1rem; }
+            .container { margin: 1.25rem auto; padding: 0 1rem; }
             .hero-img-box { height: 220px; }
             .price-badge { font-size: 1.25rem; padding: 0.4rem 1rem; bottom: 1rem; right: 1rem; }
             .card-body { padding: 1.5rem !important; }
             .dish-title { font-size: 1.85rem !important; }
-            .action-row { flex-direction: column; width: 100%; }
+            .action-row { flex-direction: column; width: 100%; gap: 0.75rem; }
             .action-row .btn { width: 100%; text-align: center; }
+        }
+        @media (max-width: 360px) {
+            .header { padding: 0.75rem 0.5rem; }
+            .brand-logo { font-size: 1.1rem; }
+            .hero-img-box { height: 180px; }
+            .dish-title { font-size: 1.5rem !important; }
+            .price-badge { font-size: 1.1rem; padding: 0.3rem 0.75rem; }
+            .card-body { padding: 1rem !important; }
+        }
+        @media (min-width: 1440px) {
+            .container { max-width: 1000px; }
+            .hero-img-box { height: 420px; }
+            .dish-title { font-size: 2.75rem !important; }
         }
     </style>
 </head>

@@ -98,14 +98,59 @@ body {
   color: var(--text-primary);
   line-height: 1.65;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-img {
+img, video, iframe, canvas, svg {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* Responsive Images */
+img {
+  object-fit: cover;
+}
+
+/* Picture element for responsive images */
+picture {
+  display: block;
+  width: 100%;
+}
+
+/* Video responsiveness */
+video {
+  width: 100%;
+  height: auto;
+}
+
+/* Iframe responsiveness (YouTube, maps, etc.) */
+iframe {
+  width: 100%;
+  border: none;
+}
+
+/* Responsive iframe container */
+.iframe-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.iframe-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+a, button, input, select, textarea {
+  touch-action: manipulation;
 }
 
 a {
@@ -124,6 +169,8 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.25;
   color: var(--text-primary);
   letter-spacing: -0.01em;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .gold-text {
@@ -148,12 +195,14 @@ h1, h2, h3, h4, h5, h6 {
    LAYOUT & CONTAINER
    ========================================================================== */
 .container {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 .container-narrow {
+  width: 100%;
   max-width: 960px;
   margin: 0 auto;
   padding: 0 1.5rem;
@@ -1490,15 +1539,27 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   background: rgba(10, 11, 14, 0.96);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   z-index: 9999;
-  display: flex;
+  display: none;
   flex-direction: column;
   padding: 2rem 1.5rem;
   overflow-y: auto;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+}
+
+.mobile-drawer.open {
+  display: flex;
+}
+
+/* Body scroll lock when drawer is open */
+body.drawer-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
 }
 
 .mobile-drawer-header {
@@ -1523,6 +1584,8 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   cursor: pointer;
   transition: var(--transition-smooth);
+  padding: 0;
+  line-height: 1;
 }
 
 .mobile-drawer-close:hover {
@@ -1588,7 +1651,7 @@ h1, h2, h3, h4, h5, h6 {
     gap: 3rem;
   }
   .specials-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   }
   .footer-grid {
     grid-template-columns: 1fr 1fr;
@@ -1690,10 +1753,54 @@ h1, h2, h3, h4, h5, h6 {
     padding: 1.75rem 1.25rem;
     max-width: 95%;
     max-height: 88vh;
+    max-height: 88dvh;
     overflow-y: auto;
   }
   .confirmation-item {
     font-size: 0.82rem;
+  }
+  
+  /* Typography improvements for mobile readability */
+  .section-title {
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  .section-desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .special-title {
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+  .special-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .menu-item-name {
+    font-size: 1.1rem;
+  }
+  .menu-item-description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .story-content h3 {
+    font-size: 1.75rem;
+  }
+  .story-content p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  
+  /* Spacing improvements */
+  .section {
+    padding: 4rem 0;
+  }
+  .special-card-body {
+    padding: 1.5rem;
+  }
+  .menu-item-row {
+    padding: 1.25rem;
   }
 }
 
@@ -1753,31 +1860,165 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Landscape Mobile Devices (Phones in Landscape Mode) */
-@media (max-height: 500px) and (orientation: landscape) {
-  .hero-section {
-    min-height: auto;
-    padding: 3rem 0 4rem 0;
+/* Extra-Small Mobile Devices (< 360px & Foldables) */
+@media (max-width: 360px) {
+  .container {
+    padding: 0 0.75rem;
   }
-  .mobile-drawer {
-    height: 100dvh;
-    padding: 1rem 1.5rem;
+  .brand-title {
+    font-size: 1.05rem;
+    letter-spacing: 0.12em;
   }
-  .mobile-nav-list {
-    gap: 0.5rem;
+  .brand-crest {
+    width: 34px;
+    height: 34px;
   }
-  .mobile-nav-link {
+  .hero-title {
+    font-size: 1.75rem;
+  }
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+  .btn {
+    padding: 0.75rem 1.1rem;
+    font-size: 0.78rem;
+    width: 100%;
+  }
+  .time-slot-btn {
+    flex: 1 1 100%;
+  }
+  .menu-tab-btn {
     padding: 0.5rem 0.85rem;
-    font-size: 0.95rem;
+    font-size: 0.74rem;
   }
-  .modal-dialog {
-    max-height: 90dvh;
+  .special-card-body {
     padding: 1.25rem;
-    overflow-y: auto;
+  }
+  .special-title {
+    font-size: 1.25rem;
+  }
+  .reservation-wrapper {
+    padding: 1.75rem 1.25rem;
+  }
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
   }
 }
 
-/* Ultra-Wide Screens & 4K Displays (>= 1440px) */
+/* Ultra-Wide Screens (> 1920px) */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1440px;
+  }
+  .hero-title {
+    font-size: clamp(3rem, 5vw, 5rem);
+  }
+  .section-title {
+    font-size: clamp(2.5rem, 4vw, 4rem);
+  }
+}
+
+/* Landscape Mobile Orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-section {
+    min-height: auto;
+    padding: 3rem 0;
+  }
+  .hero-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+  .hero-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-actions {
+    margin-bottom: 2rem;
+  }
+  .mobile-drawer {
+    padding: 1rem 1.5rem;
+  }
+  .mobile-nav-link {
+    padding: 0.6rem 0.85rem;
+    font-size: 1rem;
+  }
+}
+
+/* High DPI / Retina Display Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .brand-crest,
+  .menu-item-thumbnail img,
+  .special-img-box img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .hero-bg-img {
+    animation: none;
+  }
+}
+
+/* Dark Mode System Preference (already dark, but ensures consistency) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #0a0b0e;
+    --bg-secondary: #12141a;
+  }
+}
+
+/* Improved Touch Targets for Mobile */
+@media (hover: none) and (pointer: coarse) {
+  .btn,
+  .nav-link,
+  .mobile-nav-link,
+  .dietary-chip,
+  .time-slot-btn,
+  .menu-tab-btn,
+  .mobile-menu-toggle,
+  .mobile-drawer-close,
+  .seating-card,
+  .special-card {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  .menu-item-row {
+    padding: 1.25rem;
+  }
+  
+  .menu-item-thumbnail {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* Print Optimization */
+@media print {
+  .site-header, .top-bar, .hero-actions, .mobile-drawer, .btn, .footer-bottom {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .hero-section {
+    min-height: auto !important;
+    padding: 2rem 0 !important;
+  }
+}
+
+/* Ultra-Wide Screens & 4K Displays (>= 1440px and >= 1800px) */
 @media (min-width: 1440px) {
   .container {
     max-width: 1400px;
@@ -1793,10 +2034,23 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+@media (min-width: 1800px) {
+  .container {
+    max-width: 1600px;
+  }
+  .hero-title {
+    font-size: 5.4rem;
+  }
+  .section-title {
+    font-size: 4rem;
+  }
+}
+
 /* Universal Touch & Pointer Accessibility */
 @media (pointer: coarse) {
-  .btn, .nav-link, .mobile-nav-link, .dietary-chip, .time-slot-btn, .menu-tab-btn {
+  .btn, .nav-link, .mobile-nav-link, .dietary-chip, .time-slot-btn, .menu-tab-btn, .mobile-menu-toggle, .mobile-drawer-close {
     min-height: 44px;
+    min-width: 44px;
   }
 }
 
@@ -1835,6 +2089,7 @@ h1, h2, h3, h4, h5, h6 {
     </style>
 </head>
 <body>
+
 
 
 
@@ -1927,23 +2182,19 @@ h1, h2, h3, h4, h5, h6 {
     </div>
   </header>
 
-  <div class="mobile-drawer" id="mobile-drawer"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(10, 11, 14, 0.98); z-index: 9999; flex-direction: column; padding: 2rem;">
-    <div class="mobile-drawer-header"
-      style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <div class="mobile-drawer" id="mobile-drawer">
+    <div class="mobile-drawer-header">
       <span class="brand-title">Parsa</span>
-      <button class="mobile-drawer-close" id="mobile-drawer-close"
-        style="background: none; border: none; color: var(--gold-light); font-size: 2rem; cursor: pointer;">&times;</button>
+      <button class="mobile-drawer-close" id="mobile-drawer-close" aria-label="Close menu">&times;</button>
     </div>
-    <ul class="mobile-nav-list"
-      style="list-style: none; display: flex; flex-direction: column; gap: 1.5rem; font-size: 1.25rem;">
-      <li><a href="#about" class="mobile-nav-link" style="color: var(--text-primary);">About Us</a></li>
-      <li><a href="#menu" class="mobile-nav-link" style="color: var(--text-primary);">Our Menu</a></li>
-      <li><a href="#specials" class="mobile-nav-link" style="color: var(--text-primary);">Chef's Specials</a></li>
-      <li><a href="#reservation" class="mobile-nav-link" style="color: var(--gold-primary);">Book a Table</a></li>
-      <li><a href="#gallery" class="mobile-nav-link" style="color: var(--text-primary);">Photos</a></li>
-      <li><a href="#reviews" class="mobile-nav-link" style="color: var(--text-primary);">Reviews</a></li>
-      <li><a href="#contact" class="mobile-nav-link" style="color: var(--text-primary);">Contact & Hours</a></li>
+    <ul class="mobile-nav-list">
+      <li><a href="#about" class="mobile-nav-link">About Us</a></li>
+      <li><a href="#menu" class="mobile-nav-link">Our Menu</a></li>
+      <li><a href="#specials" class="mobile-nav-link">Chef's Specials</a></li>
+      <li><a href="#reservation" class="mobile-nav-link">Book a Table</a></li>
+      <li><a href="#gallery" class="mobile-nav-link">Photos</a></li>
+      <li><a href="#reviews" class="mobile-nav-link">Reviews</a></li>
+      <li><a href="#contact" class="mobile-nav-link">Contact & Hours</a></li>
     </ul>
   </div>
 
@@ -2962,6 +3213,9 @@ h1, h2, h3, h4, h5, h6 {
     
 
     <!-- Complete Inlined JS Scripts -->
+    
+
+    <!-- Complete Inlined JS Scripts -->
     <script>
 /**
  * L'Étoile Dorée - Main JavaScript
@@ -2987,19 +3241,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (mobileMenuBtn && mobileDrawer) {
         mobileMenuBtn.addEventListener('click', () => {
-            mobileDrawer.style.display = 'flex';
+            mobileDrawer.classList.add('open');
+            document.body.classList.add('drawer-open');
         });
 
         if (mobileDrawerClose) {
             mobileDrawerClose.addEventListener('click', () => {
-                mobileDrawer.style.display = 'none';
+                mobileDrawer.classList.remove('open');
+                document.body.classList.remove('drawer-open');
             });
         }
 
         mobileNavLinks.forEach(link => {
             link.addEventListener('click', () => {
-                mobileDrawer.style.display = 'none';
+                mobileDrawer.classList.remove('open');
+                document.body.classList.remove('drawer-open');
             });
+        });
+
+        // Close drawer on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileDrawer.classList.contains('open')) {
+                mobileDrawer.classList.remove('open');
+                document.body.classList.remove('drawer-open');
+            }
+        });
+
+        // Close drawer when clicking outside
+        mobileDrawer.addEventListener('click', (e) => {
+            if (e.target === mobileDrawer) {
+                mobileDrawer.classList.remove('open');
+                document.body.classList.remove('drawer-open');
+            }
         });
     }
 
