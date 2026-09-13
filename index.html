@@ -2834,7 +2834,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const notes = document.getElementById('res_notes')?.value || '';
 
             // Format readable time
-            let displayTime = time;
+            let displayTime = time; //
             if (time.includes(':')) {
                 const parts = time.split(':');
                 const hour = parseInt(parts[0], 10);
