@@ -39,7 +39,6 @@ const server = http.createServer((req, res) => {
 
     fs.stat(filePath, (err, stats) => {
         if (err || !stats.isFile()) {
-            // Check if user requested a directory without index.html
             const maybeIndex = path.join(filePath, 'index.html');
             if (fs.existsSync(maybeIndex)) {
                 filePath = maybeIndex;

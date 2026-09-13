@@ -11,13 +11,29 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Complete Combined Inlined Styles (style.css + main.css) -->
     <style>
-
+/*
+Theme Name: Parsa - Restaurant & Bistro
+Theme URI: https://parsa-restaurant.com
+Author: Parsa Team
+Author URI: https://parsa-restaurant.com
+Description: Clean, modern, custom WordPress theme for Parsa Restaurant featuring digital menus, dietary filtering, real-time table reservations, dark obsidian theme with gold accents, and simple clear wording.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: parsa-bistro
+Tags: restaurant, food-and-drink, custom-menu, custom-logo, featured-images, full-site-editing, grid-layout, dark-theme, responsive-layout
+*/
 
 /* ==========================================================================
    CSS VARIABLES & DESIGN SYSTEM
    ========================================================================== */
 :root {
+  /* Color Palette */
   --bg-primary: #0a0b0e;
   --bg-secondary: #12141a;
   --bg-card: rgba(22, 25, 34, 0.7);
@@ -45,10 +61,12 @@
   --border-gold: rgba(212, 175, 55, 0.35);
   --border-bright: rgba(212, 175, 55, 0.7);
 
+  /* Typography */
   --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-accent: 'Cinzel', 'Playfair Display', serif;
 
+  /* Transitions & Radii */
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
@@ -292,6 +310,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(244, 67, 54, 0.4);
 }
 
+/* Glass Card */
 .glass-card {
   background: var(--bg-card);
   backdrop-filter: blur(16px);
@@ -309,6 +328,9 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), var(--gold-glow);
 }
 
+
+
+/* Top Info Bar */
 .top-bar {
   background-color: rgba(10, 11, 14, 0.9);
   border-bottom: 1px solid var(--border-subtle);
@@ -1444,12 +1466,129 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN
+   MOBILE & RESPONSIVE ENHANCEMENTS
    ========================================================================== */
+
+/* Touch & iOS Input Zoom Fix */
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="time"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Mobile Drawer Overlay Navigation */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 11, 14, 0.96);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+}
+
+.mobile-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-gold);
+  margin-bottom: 2rem;
+}
+
+.mobile-drawer-close {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-light);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  font-size: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.mobile-drawer-close:hover {
+  background: var(--gold-gradient);
+  color: #000;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.mobile-nav-link {
+  font-family: var(--font-accent);
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: var(--transition-smooth);
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--border-gold);
+  color: var(--gold-light);
+  transform: translateX(6px);
+}
+
+/* Tablet & Medium Screens (< 992px) */
 @media (max-width: 992px) {
+  .top-bar-info {
+    gap: 1rem;
+  }
+  .hero-section {
+    padding: 4rem 0 5rem 0;
+    min-height: auto;
+  }
+  .hero-title {
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+  }
+  .hero-quick-bar {
+    max-width: 100%;
+    padding: 1.25rem;
+  }
+  .quick-bar-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .quick-bar-form button {
+    grid-column: 1 / -1;
+  }
   .story-grid {
     grid-template-columns: 1fr;
     gap: 3rem;
+  }
+  .specials-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
   .footer-grid {
     grid-template-columns: 1fr 1fr;
@@ -1466,28 +1605,160 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-@media (max-width: 600px) {
+/* Mobile Screens (< 768px) */
+@media (max-width: 768px) {
+  .top-bar .container {
+    justify-content: center;
+    text-align: center;
+  }
+  .top-bar-info {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .hero-badge {
+    font-size: 0.7rem;
+    padding: 0.4rem 1rem;
+    letter-spacing: 0.15em;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.85rem;
+  }
+  .hero-actions .btn {
+    width: 100%;
+  }
+  .quick-bar-form {
+    grid-template-columns: 1fr;
+  }
+  .menu-category-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .menu-category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .menu-tab-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 0.6rem 1.1rem;
+    font-size: 0.78rem;
+  }
+  .menu-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+  .dietary-filters {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.35rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .dietary-chip {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .story-badge-float {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    margin-top: 1rem;
+    display: inline-block;
+  }
+  .seating-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .time-slots {
+    justify-content: space-between;
+  }
+  .time-slot-btn {
+    flex: 1 1 calc(33.333% - 0.5rem);
+    text-align: center;
+  }
+  .modal-dialog {
+    padding: 1.75rem 1.25rem;
+    max-width: 95%;
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+  .confirmation-item {
+    font-size: 0.82rem;
+  }
+}
+
+/* Small Mobile Screens (< 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+  .section {
+    padding: 3.5rem 0;
+  }
+  .section-header {
+    margin-bottom: 2.25rem;
+  }
+  .section-title {
+    font-size: 1.85rem;
+  }
+  .seating-options {
+    grid-template-columns: 1fr;
+  }
+  .time-slot-btn {
+    flex: 1 1 calc(50% - 0.5rem);
+  }
   .menu-items-grid {
     grid-template-columns: 1fr;
   }
   .menu-item-row {
     flex-direction: column;
+    padding: 1.25rem;
   }
   .menu-item-thumbnail {
     width: 100%;
     height: 180px;
+    margin-bottom: 0.75rem;
+  }
+  .menu-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  .menu-item-price {
+    font-size: 1.25rem;
   }
   .footer-grid {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
-  .reservation-wrapper {
-    padding: 2rem 1.25rem;
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+  .newsletter-form {
+    flex-direction: column;
+  }
+  .newsletter-form button {
+    width: 100%;
   }
 }
+
 
     </style>
 </head>
 <body>
+
+
 
 
 
@@ -2603,9 +2874,18 @@ h1, h2, h3, h4, h5, h6 {
   </div>
 
 
-    <script>
+    
 
+    <!-- Complete Inlined JS Scripts -->
+    
+
+    <!-- Complete Inlined JS Scripts -->
+    <script>
+/**
+ * L'Étoile Dorée - Main JavaScript
+ */
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Sticky Header Scroll Effect
     const siteHeader = document.getElementById('site-header');
     if (siteHeader) {
         window.addEventListener('scroll', () => {
@@ -2617,6 +2897,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 2. Mobile Menu Drawer Toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileDrawer = document.getElementById('mobile-drawer');
     const mobileDrawerClose = document.getElementById('mobile-drawer-close');
@@ -2640,6 +2921,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 3. Interactive Digital Menu Category & Dietary Filtering
     const categoryTabs = document.querySelectorAll('.menu-tab-btn');
     const dietaryChips = document.querySelectorAll('.dietary-chip');
     const searchInput = document.getElementById('menu-search-input');
@@ -2669,6 +2951,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Category click handler
     categoryTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             categoryTabs.forEach(t => t.classList.remove('active'));
@@ -2678,6 +2961,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Dietary click handler
     dietaryChips.forEach(chip => {
         chip.addEventListener('click', () => {
             dietaryChips.forEach(c => c.classList.remove('active'));
@@ -2687,6 +2971,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Search input handler
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             currentSearch = e.target.value.toLowerCase().trim();
@@ -2694,6 +2979,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 4. Smooth Anchor Scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
@@ -2710,6 +2996,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // 5. Interactive Dish Detail Modal (Simple Clear Words & Detailed Food Info)
     const DISH_DETAILS = {
         'Parsa Special Wagyu Steak': {
             price: '$145',
@@ -2921,6 +3208,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+
+/**
+ * Parsa Restaurant & Bistro - Table Reservation Engine
+ */
+
+// ⚙️ WORDPRESS & VERCEL CONFIGURATION
+// Automatically detects your Vercel link (e.g. https://your-site.vercel.app) or WordPress backend:
 const WORDPRESS_BACKEND_URL = window.letoileSettings?.ajaxUrl || window.location.origin + '/wp-admin/admin-ajax.php';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2939,6 +3234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // 2. Service Time Slot Selector
     const timeSlotBtns = document.querySelectorAll('.time-slot-btn');
     const selectedTimeInput = document.getElementById('selected_time');
 
@@ -2953,6 +3249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // 3. Reservation Form Submission
     const reservationForm = document.getElementById('letoile-reservation-form');
     const modal = document.getElementById('reservation-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
@@ -2993,8 +3290,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 year: 'numeric'
             });
 
+            // Generate Booking Code
             const bookingCode = 'PARSA-' + Math.random().toString(36).substring(2, 7).toUpperCase();
 
+            // Direct Supabase Database Submission
             const supabaseUrl = window.PARSA_SUPABASE_URL || localStorage.getItem('parsa_supabase_url') || 'https://praocrdvlavznipehkek.supabase.co';
             const supabaseKey = window.PARSA_SUPABASE_KEY || localStorage.getItem('parsa_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByYW9jcmR2bGF2em5pcGVoa2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNjE4MDgsImV4cCI6MjEwNDgzNzgwOH0.iSSN3G3m101wgesZpEEw1dMqZVJ1jnCNBoH4etOrGEA';
 
@@ -3023,6 +3322,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(err => console.warn('Supabase database sync note:', err));
             }
 
+            // Save to local storage cache as backup
             try {
                 const existing = JSON.parse(localStorage.getItem('parsa_reservations') || '[]');
                 existing.unshift({
@@ -3041,6 +3341,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('parsa_reservations', JSON.stringify(existing));
             } catch(e) {}
 
+            // Send Reservation to WordPress Backend API if connected
             const backendEndpoint = window.letoileSettings?.ajaxUrl || WORDPRESS_BACKEND_URL;
 
             if (window.jQuery && window.letoileSettings) {
@@ -3073,6 +3374,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             } else {
+                // Standalone / Vercel Live Preview Simulation
                 setTimeout(() => {
                     displayConfirmationModal(bookingCode, name, formattedDate + ' at ' + displayTime, guests, seating);
                     if (submitBtn) {
