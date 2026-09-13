@@ -11,29 +11,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Complete Combined Inlined Styles (style.css + main.css) -->
     <style>
-/*
-Theme Name: Parsa - Restaurant & Bistro
-Theme URI: https://parsa-restaurant.com
-Author: Parsa Team
-Author URI: https://parsa-restaurant.com
-Description: Clean, modern, custom WordPress theme for Parsa Restaurant featuring digital menus, dietary filtering, real-time table reservations, dark obsidian theme with gold accents, and simple clear wording.
-Version: 1.0.0
-Requires at least: 6.0
-Tested up to: 6.7
-Requires PHP: 7.4
-License: GNU General Public License v2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: parsa-bistro
-Tags: restaurant, food-and-drink, custom-menu, custom-logo, featured-images, full-site-editing, grid-layout, dark-theme, responsive-layout
-*/
+
 
 /* ==========================================================================
    CSS VARIABLES & DESIGN SYSTEM
    ========================================================================== */
 :root {
-  /* Color Palette */
   --bg-primary: #0a0b0e;
   --bg-secondary: #12141a;
   --bg-card: rgba(22, 25, 34, 0.7);
@@ -61,12 +45,10 @@ Tags: restaurant, food-and-drink, custom-menu, custom-logo, featured-images, ful
   --border-gold: rgba(212, 175, 55, 0.35);
   --border-bright: rgba(212, 175, 55, 0.7);
 
-  /* Typography */
   --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-accent: 'Cinzel', 'Playfair Display', serif;
 
-  /* Transitions & Radii */
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
@@ -128,6 +110,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .gold-text {
   background: var(--gold-gradient);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
@@ -309,7 +292,6 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(244, 67, 54, 0.4);
 }
 
-/* Glass Card */
 .glass-card {
   background: var(--bg-card);
   backdrop-filter: blur(16px);
@@ -327,12 +309,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), var(--gold-glow);
 }
 
-
-/* ==========================================================================
-   L'ÉTOILE DORÉE - COMPLETE LUXURY STYLESHEET
-   ========================================================================== */
-
-/* Top Info Bar */
 .top-bar {
   background-color: rgba(10, 11, 14, 0.9);
   border-bottom: 1px solid var(--border-subtle);
@@ -615,7 +591,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 3.5rem;
 }
 
-/* Floating Quick Reserve Bar */
 .hero-quick-bar {
   background: var(--bg-card);
   backdrop-filter: blur(20px);
@@ -1551,11 +1526,9 @@ h1, h2, h3, h4, h5, h6 {
     </div>
   </div>
 
-  <!-- Main Sticky Header -->
   <header id="site-header" class="site-header">
     <div class="container">
       <div class="header-inner">
-        <!-- Brand Logo -->
         <a href="#" class="brand-logo" id="brand-logo-link">
           <div class="brand-crest">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -1604,7 +1577,6 @@ h1, h2, h3, h4, h5, h6 {
     </div>
   </header>
 
-  <!-- Mobile Navigation Drawer -->
   <div class="mobile-drawer" id="mobile-drawer"
     style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(10, 11, 14, 0.98); z-index: 9999; flex-direction: column; padding: 2rem;">
     <div class="mobile-drawer-header"
@@ -1670,7 +1642,6 @@ h1, h2, h3, h4, h5, h6 {
           </a>
         </div>
 
-        <!-- Floating Quick Reservation Bar -->
         <div class="hero-quick-bar">
           <form class="quick-bar-form" id="hero-quick-reserve-form"
             onsubmit="event.preventDefault(); window.location.href='#reservation';">
@@ -1728,7 +1699,6 @@ h1, h2, h3, h4, h5, h6 {
   <section class="section" id="about" style="background-color: var(--bg-secondary);">
     <div class="container">
       <div class="story-grid">
-        <!-- Left: Visual Frame -->
         <div class="story-image-wrapper">
           <img src="/assets/images/hero.jpg" alt="Parsa Restaurant" class="story-img-main">
           <div class="story-badge-float">
@@ -1859,7 +1829,6 @@ h1, h2, h3, h4, h5, h6 {
           </div>
         </div>
 
-        <!-- Special 4: Golden Chocolate Sphere -->
         <div class="special-card">
           <div class="special-img-box">
             <img src="/assets/images/dish-dessert.jpg" alt="Chocolate Gold Cake">
@@ -1909,7 +1878,6 @@ h1, h2, h3, h4, h5, h6 {
           <button class="menu-tab-btn" data-category="cocktails">Cocktails & Drinks</button>
         </div>
 
-        <!-- Dietary Filters & Search Bar -->
         <div class="menu-filter-bar">
           <div class="dietary-filters">
             <span class="dietary-label">Dietary:</span>
@@ -2188,7 +2156,6 @@ h1, h2, h3, h4, h5, h6 {
               </select>
             </div>
 
-            <!-- Seating Ambiance Area -->
             <div class="form-group full-width">
               <label class="form-label">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2225,7 +2192,6 @@ h1, h2, h3, h4, h5, h6 {
               <input type="hidden" id="selected_seating" name="res_seating" value="Main Dining Room">
             </div>
 
-            <!-- Time Slots -->
             <div class="form-group full-width">
               <label class="form-label">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2249,7 +2215,6 @@ h1, h2, h3, h4, h5, h6 {
               <input type="hidden" id="selected_time" name="res_time" value="19:00">
             </div>
 
-            <!-- Guest Contact Details -->
             <div class="form-group">
               <label class="form-label" for="guest_name">Your Name *</label>
               <input type="text" id="guest_name" name="guest_name" class="form-input" placeholder="e.g. John Smith"
@@ -2362,7 +2327,6 @@ h1, h2, h3, h4, h5, h6 {
       </div>
 
       <div class="reviews-grid">
-        <!-- Review 1 -->
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
           <div class="review-text">
@@ -2419,7 +2383,6 @@ h1, h2, h3, h4, h5, h6 {
   <section class="section" id="contact" style="background-color: var(--bg-primary);">
     <div class="container">
       <div class="story-grid">
-        <!-- Left Info -->
         <div>
           <div class="section-subtitle">Visit Us</div>
           <h2 style="font-size: 2.5rem; margin-bottom: 1.25rem;">
@@ -2467,7 +2430,6 @@ h1, h2, h3, h4, h5, h6 {
           <a href="#reservation" class="btn btn-gold">Book a Table Now →</a>
         </div>
 
-        <!-- Right: Interactive Private Inquiries Card -->
         <div class="glass-card" style="padding: 2.5rem;">
           <h3 class="gold-text" style="font-size: 1.5rem; margin-bottom: 1rem;">Host a Party at Parsa</h3>
           <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
@@ -2563,7 +2525,6 @@ h1, h2, h3, h4, h5, h6 {
           </ul>
         </div>
 
-        <!-- Column 4: Newsletter & Parking -->
         <div>
           <h4 class="footer-heading">Join Our Newsletter</h4>
           <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.85rem;">
@@ -2580,7 +2541,6 @@ h1, h2, h3, h4, h5, h6 {
         </div>
       </div>
 
-      <!-- Footer Bottom -->
       <div class="footer-bottom">
         <div>
           &copy; 2026 Parsa Restaurant & Bistro. All Rights Reserved.
@@ -2595,7 +2555,6 @@ h1, h2, h3, h4, h5, h6 {
     </div>
   </footer>
 
-  <!-- Table Reservation Instant Confirmation Modal -->
   <div class="modal-backdrop" id="reservation-modal">
     <div class="modal-dialog">
       <div class="modal-icon-success">
@@ -2643,29 +2602,10 @@ h1, h2, h3, h4, h5, h6 {
     </div>
   </div>
 
-  <!-- Scripts -->
-  <!-- Inlined Theme JS for Vercel -->
 
-
-  <!-- Complete Inlined JS Scripts -->
-
-
-  <!-- Complete Inlined JS Scripts -->
-  
-
-    <!-- Complete Inlined JS Scripts -->
-    
-
-    <!-- Complete Inlined JS Scripts -->
-    
-
-    <!-- Complete Inlined JS Scripts -->
     <script>
-/**
- * L'Étoile Dorée - Main JavaScript
- */
+
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Sticky Header Scroll Effect
     const siteHeader = document.getElementById('site-header');
     if (siteHeader) {
         window.addEventListener('scroll', () => {
@@ -2677,7 +2617,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Mobile Menu Drawer Toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileDrawer = document.getElementById('mobile-drawer');
     const mobileDrawerClose = document.getElementById('mobile-drawer-close');
@@ -2701,7 +2640,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Interactive Digital Menu Category & Dietary Filtering
     const categoryTabs = document.querySelectorAll('.menu-tab-btn');
     const dietaryChips = document.querySelectorAll('.dietary-chip');
     const searchInput = document.getElementById('menu-search-input');
@@ -2731,7 +2669,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Category click handler
     categoryTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             categoryTabs.forEach(t => t.classList.remove('active'));
@@ -2741,7 +2678,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Dietary click handler
     dietaryChips.forEach(chip => {
         chip.addEventListener('click', () => {
             dietaryChips.forEach(c => c.classList.remove('active'));
@@ -2751,7 +2687,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Search input handler
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             currentSearch = e.target.value.toLowerCase().trim();
@@ -2759,7 +2694,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Smooth Anchor Scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
@@ -2776,7 +2710,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 5. Interactive Dish Detail Modal (Simple Clear Words & Detailed Food Info)
     const DISH_DETAILS = {
         'Parsa Special Wagyu Steak': {
             price: '$145',
@@ -2988,14 +2921,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-
-/**
- * Parsa Restaurant & Bistro - Table Reservation Engine
- */
-
-// ⚙️ WORDPRESS & VERCEL CONFIGURATION
-// Automatically detects your Vercel link (e.g. https://your-site.vercel.app) or WordPress backend:
 const WORDPRESS_BACKEND_URL = window.letoileSettings?.ajaxUrl || window.location.origin + '/wp-admin/admin-ajax.php';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -3014,7 +2939,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 2. Service Time Slot Selector
     const timeSlotBtns = document.querySelectorAll('.time-slot-btn');
     const selectedTimeInput = document.getElementById('selected_time');
 
@@ -3029,7 +2953,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Reservation Form Submission
     const reservationForm = document.getElementById('letoile-reservation-form');
     const modal = document.getElementById('reservation-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
@@ -3070,10 +2993,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 year: 'numeric'
             });
 
-            // Generate Booking Code
             const bookingCode = 'PARSA-' + Math.random().toString(36).substring(2, 7).toUpperCase();
 
-            // Direct Supabase Database Submission
             const supabaseUrl = window.PARSA_SUPABASE_URL || localStorage.getItem('parsa_supabase_url') || 'https://praocrdvlavznipehkek.supabase.co';
             const supabaseKey = window.PARSA_SUPABASE_KEY || localStorage.getItem('parsa_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByYW9jcmR2bGF2em5pcGVoa2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNjE4MDgsImV4cCI6MjEwNDgzNzgwOH0.iSSN3G3m101wgesZpEEw1dMqZVJ1jnCNBoH4etOrGEA';
 
@@ -3102,7 +3023,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(err => console.warn('Supabase database sync note:', err));
             }
 
-            // Save to local storage cache as backup
             try {
                 const existing = JSON.parse(localStorage.getItem('parsa_reservations') || '[]');
                 existing.unshift({
@@ -3121,7 +3041,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('parsa_reservations', JSON.stringify(existing));
             } catch(e) {}
 
-            // Send Reservation to WordPress Backend API if connected
             const backendEndpoint = window.letoileSettings?.ajaxUrl || WORDPRESS_BACKEND_URL;
 
             if (window.jQuery && window.letoileSettings) {
@@ -3154,7 +3073,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             } else {
-                // Standalone / Vercel Live Preview Simulation
                 setTimeout(() => {
                     displayConfirmationModal(bookingCode, name, formattedDate + ' at ' + displayTime, guests, seating);
                     if (submitBtn) {

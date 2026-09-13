@@ -11,27 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Complete Combined Inlined Styles (style.css + main.css) -->
     <style>
-/*
-Theme Name: Parsa - Restaurant & Bistro
-Theme URI: https://parsa-restaurant.com
-Author: Parsa Team
-Author URI: https://parsa-restaurant.com
-Description: Clean, modern, custom WordPress theme for Parsa Restaurant featuring digital menus, dietary filtering, real-time table reservations, dark obsidian theme with gold accents, and simple clear wording.
-Version: 1.0.0
-Requires at least: 6.0
-Tested up to: 6.7
-Requires PHP: 7.4
-License: GNU General Public License v2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: parsa-bistro
-Tags: restaurant, food-and-drink, custom-menu, custom-logo, featured-images, full-site-editing, grid-layout, dark-theme, responsive-layout
-*/
 
-/* ==========================================================================
-   CSS VARIABLES & DESIGN SYSTEM
-   ========================================================================== */
 :root {
   /* Color Palette */
   --bg-primary: #0a0b0e;
@@ -76,9 +57,7 @@ Tags: restaurant, food-and-drink, custom-menu, custom-logo, featured-images, ful
   --shadow-card: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 0 1px 1px var(--border-subtle);
 }
 
-/* ==========================================================================
-   BASE & RESET
-   ========================================================================== */
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -128,6 +107,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .gold-text {
   background: var(--gold-gradient);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
@@ -143,9 +123,7 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
 }
 
-/* ==========================================================================
-   LAYOUT & CONTAINER
-   ========================================================================== */
+
 .container {
   max-width: 1280px;
   margin: 0 auto;
@@ -201,9 +179,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.05rem;
 }
 
-/* ==========================================================================
-   BUTTONS & UI COMPONENTS
-   ========================================================================== */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -328,9 +304,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-/* ==========================================================================
-   L'ÉTOILE DORÉE - COMPLETE LUXURY STYLESHEET
-   ========================================================================== */
 
 /* Top Info Bar */
 .top-bar {
@@ -389,9 +362,7 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: scale(0.95); opacity: 0.8; }
 }
 
-/* ==========================================================================
-   HEADER & NAVIGATION
-   ========================================================================== */
+
 .site-header {
   position: sticky;
   top: 0;
@@ -515,9 +486,7 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
 }
 
-/* ==========================================================================
-   HERO SECTION
-   ========================================================================== */
+
 .hero-section {
   position: relative;
   min-height: 90vh;
@@ -669,9 +638,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
-/* ==========================================================================
-   CHEF & STORY SECTION
-   ========================================================================== */
+
 .story-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -761,9 +728,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--gold-light);
 }
 
-/* ==========================================================================
-   FEATURED TASTING SPECIALS
-   ========================================================================== */
+
 .specials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -851,9 +816,7 @@ h1, h2, h3, h4, h5, h6 {
   border-top: 1px dashed var(--border-subtle);
 }
 
-/* ==========================================================================
-   INTERACTIVE DIGITAL MENU EXPLORER
-   ========================================================================== */
+
 .menu-controls {
   margin-bottom: 3rem;
 }
@@ -1073,9 +1036,6 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
-/* ==========================================================================
-   RESERVATION BOOKING ENGINE
-   ========================================================================== */
 .reservation-section {
   background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
               radial-gradient(circle at bottom left, rgba(139, 38, 29, 0.08) 0%, transparent 60%),
@@ -1293,9 +1253,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
-/* ==========================================================================
-   REVIEWS & TESTIMONIALS
-   ========================================================================== */
+
 .reviews-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -1514,13 +1472,6 @@ h1, h2, h3, h4, h5, h6 {
 </head>
 <body>
 
-
-
-
-
-
-
-  <!-- Top Info Bar -->
   <div class="top-bar">
     <div class="container">
       <div class="top-bar-info">
@@ -1551,11 +1502,9 @@ h1, h2, h3, h4, h5, h6 {
     </div>
   </div>
 
-  <!-- Main Sticky Header -->
   <header id="site-header" class="site-header">
     <div class="container">
       <div class="header-inner">
-        <!-- Brand Logo -->
         <a href="#" class="brand-logo" id="brand-logo-link">
           <div class="brand-crest">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">

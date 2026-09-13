@@ -14,7 +14,7 @@ An ultra-luxury fine dining, steakhouse, and modern bistro web platform. Enginee
 - 🌐 **Live Website**: [https://wwwee.vercel.app/](https://wwwee.vercel.app/)
 - 👑 **Live Admin Dashboard**: [https://wwwee.vercel.app/admin.html](https://wwwee.vercel.app/admin.html)
 - 🗄️ **Supabase Cloud Project**: [praocrdvlavznipehkek](https://supabase.com/dashboard/project/praocrdvlavznipehkek)
-- 📦 **Installable WP Theme**: [`letoile-luxury-bistro.zip`](./letoile-luxury-bistro.zip)
+- 📦 **Installable WP Theme**: [`parsa.zip`](./parsa.zip)
 - 📘 **Backend Developer Guide**: [`BACKEND_DEVELOPER_GUIDE.md`](./BACKEND_DEVELOPER_GUIDE.md)
 
 ---
@@ -36,7 +36,7 @@ An ultra-luxury fine dining, steakhouse, and modern bistro web platform. Enginee
 - **2-Way Synchronized Deletion**: Delete reservations directly in the admin dashboard or via Supabase dashboard.
 - **1-Click CSV Export**: Download guest lists formatted for Microsoft Excel.
 
-### 4. 📦 Installable WordPress Theme (`letoile-luxury-bistro.zip`)
+### 4. 📦 Installable WordPress Theme (`parsa.zip`)
 - Complete custom WordPress theme ready for upload via `WP-Admin -> Appearance -> Themes`.
 - Custom post types (`menu_item`, `reservation`), custom admin panel, and REST API endpoints (`/wp-json/letoile/v1/menu`).
 
@@ -86,7 +86,7 @@ wordpress/
 ├── dish-*.html                  # Dedicated dish detail pages
 ├── public/                      # Static assets root served by Vercel
 ├── assets/                      # CSS, JS, and high-res photography assets
-├── letoile-luxury-bistro.zip    # Installable WordPress theme package
+├── parsa.zip                    # Installable WordPress theme package
 ├── scripts/                     # Build & bundle scripts
 ├── server.js                    # Zero-dependency local preview server
 └── wp-content/themes/           # WordPress theme source code

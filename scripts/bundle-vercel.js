@@ -13,7 +13,6 @@ const jsResContent = fs.readFileSync(jsResPath, 'utf8');
 
 const fullCombinedCss = styleCssContent + '\n\n' + mainCssContent;
 
-// We start clean from preview/index.html or a baseline template
 let html = `<!DOCTYPE html>
 <html lang="en">
 <head>

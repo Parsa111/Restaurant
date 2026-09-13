@@ -1,7 +1,7 @@
 {
-  "name": "letoile-luxury-bistro-wordpress-theme",
+  "name": "luxury wordpress-theme",
   "version": "1.0.0",
-  "description": "L'Étoile Dorée - Ultra-Luxury Restaurant & Bistro WordPress Theme",
+  "description": "Luxury Restaurant with WordPress Theme",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
