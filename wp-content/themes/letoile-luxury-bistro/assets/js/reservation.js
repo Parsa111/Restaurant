@@ -82,8 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const bookingCode = 'PARSA-' + Math.random().toString(36).substring(2, 7).toUpperCase();
 
             // Direct Supabase Database Submission
-            const supabaseUrl = window.PARSA_SUPABASE_URL || localStorage.getItem('parsa_supabase_url');
-            const supabaseKey = window.PARSA_SUPABASE_KEY || localStorage.getItem('parsa_supabase_key');
+            const supabaseUrl = window.PARSA_SUPABASE_URL || localStorage.getItem('parsa_supabase_url') || 'https://praocrdvlavznipehkek.supabase.co';
+            const supabaseKey = window.PARSA_SUPABASE_KEY || localStorage.getItem('parsa_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByYW9jcmR2bGF2em5pcGVoa2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNjE4MDgsImV4cCI6MjEwNDgzNzgwOH0.iSSN3G3m101wgesZpEEw1dMqZVJ1jnCNBoH4etOrGEA';
 
             if (supabaseUrl && supabaseKey) {
                 fetch(supabaseUrl.replace(/\/$/, '') + '/rest/v1/reservations', {
